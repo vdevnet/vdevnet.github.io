@@ -1,0 +1,431 @@
+<table bordercolor="#FFFFFF" style="border:1px solid black;border-color:rgb(136,136,136)">
+<tbody>
+<tr>
+  
+<td bgcolor="#E6E6FA" style="width:660px;height:15px">  <font face="Book Antique" size="5"><font color="#448824">Sets</font> </font>
+  </td>
+</tr>
+  
+
+</tbody>
+
+</table>
+<table bordercolor="#FFFFFF" style="border:1px solid black;border-color:rgb(136,136,136)">
+ 
+<tbody>
+<tr>
+  
+<td bgcolor="#FFF5EE" style="width:660px;height:80px"><font face="Courier new" size="3">
+<div align="justify"><strong><u><font color="#4207AD" face="Courier new" size="3"><br>
+</font></u></strong></div>
+<div align="justify"><strong><font color="#4207AD" face="Courier new" size="3"><u>Use:</u></font></strong><br>
+<br>
+</div>
+<div align="justify">
+
+• Sets are suitable for storing dates, records, IP addresses.<br>
+<br>
+• Sets can be used to filter by duplicate values (You can convert a tuple to set and vice versa. After this operation duplicate values will be deleted.)<br>
+<br>
+• Python sets is suitable for Graph. Sets help save the items that have already been visited in order to avoid
+looping.
+<br>
+<br>
+• Sets are suitable for working with large data ( database queries).
+	
+<br>
+<br>
+<strong><font color="#4207AD" face="Courier new" size="3"><u>Characteristics:</u></font></strong></div>
+<div align="justify"><font color="#4207ad"><b><u><br>
+</u></b></font>
+	
+	
+• Sets are created by are written with curly brackets and and key word <font color="#576DEC"><i><b>'set'</b></i></font>.</div>
+<div align="justify"><br>
+</div>
+<div align="justify">
+• Sets is an unordered collection.<br>
+<br>
+• Sets <font color="#cc0000">dont`t have</font> duplicates.</div>
+<div align="justify"><br>
+• Sets can be changed, but they <font color="#cc0000">items - not</font>! <br>
+<br>
+• Sets do not support indexing, slicing, or other sequence-like behavior.
+
+	
+	
+	
+</div>
+	
+	
+
+	
+	
+	</font></td>
+</tr>
+ </tbody>
+</table>
+<table bordercolor="#FFFFFF" style="border:1px solid black;border-color:rgb(136,136,136)">
+ 
+<tbody>
+<tr>
+  
+<td bgcolor="#FFF5EE" style="width:660px;height:80px">
+<br>
+	<font face="Courier new" size="3"> <strong><u><font color="#4207AD" face="Courier new" size="3">Code</font></u></strong><br>
+    
+<br>
+
+	
+M<font color="#990000">=</font>{<font color="#b45f06">"Kawasaki"</font>, <font color="#b45f06">"Yamaha"</font>,<font color="#b45f06">"Honda"</font>}<br>
+k=<i><font color="#0b5394">set</font></i>([<font color="#b45f06">'Ra'</font>,<font color="#b45f06">'D'</font>])<br>
+<font color="#0b5394">
+print</font>(M)<br>
+<font color="#0b5394">
+print</font>(k)<br>
+
+		
+</font>
+	</td>
+</tr>
+ </tbody>
+</table>
+<br>
+<br>
+<b><font color="#006400" face="Book Antique" size="5"><u>Result</u></font></b>
+<div><b><font color="#006400" face="Book Antique" size="5"><u>
+<div style="display:block;text-align:left">
+<div style="display:block;text-align:left"><a href="https://sites.google.com/site/ciscopractic/https-sites-google-com-site-ciscopractic-python/sets/sets.jpg?attredirects=0" imageanchor="1"><img border="0" src="https://sites.google.com/site/ciscopractic/https-sites-google-com-site-ciscopractic-python/sets/sets.jpg"></a></div>
+<br>
+</div>
+
+</u></font></b></div>
+
+<br>
+<table bordercolor="#FFFFFF" style="border:1px solid black;border-color:rgb(136,136,136)">
+<tbody>
+<tr>
+  
+<td bgcolor="#E6E6FA" style="width:660px;height:15px">  <font face="Book Antique" size="5"><font color="#448824">Operations on sets.</font> </font>
+  </td>
+</tr>
+  
+
+</tbody>
+
+</table>
+<table bordercolor="#FFFFFF" style="border:1px solid black;border-color:rgb(136,136,136)">
+ 
+<tbody>
+<tr>
+  
+<td bgcolor="#FFF5EE" style="width:660px;height:80px"><font face="Courier new" size="3">
+<div align="justify">
+<br>
+
+
+	
+	
+	<b><font color="#576dec">•  </font><font color="#ffffff" style="background-color:#688eff">Add an elements</font></b><br>
+
+<div style="margin-left:20px">
+
+	
+	
+	Method adds element elem to the set. The method doesn't add an element to the set if it's already present in it.<br>
+Operation can be performed by using the function  <font color="#6495ED"><b><i>'add()'</i></b></font><br>
+	You can add to sets a <i>tuple</i> object.
+	</div>
+<br>
+	
+<b><font color="#576dec">•  </font><font color="#ffffff" style="background-color:#688eff">Intersection</font></b><br>
+
+<div style="margin-left:20px">
+	Intersection of two given sets is new set which contains all the elements that are common to both the sets.<br>
+	Operation can be performed using the symbol <font color="#6495ED"><b>'&amp;'</b></font> or function <font color="#6495ED"><b><i>'intersection()'</i></b></font>
+	</div>
+	
+	
+<br>
+<b><font color="#576dec">•  </font><font color="#ffffff" style="background-color:#688eff">Union</font></b><br>
+<div style="margin-left:20px">
+Union of two given sets is new set which contains all the elements of both the sets.<br>
+Operation can be performed using the symbol <font color="#6495ED"><b>'|'</b></font><span style="background-color:transparent;text-align:left">or function</span><span style="background-color:transparent;text-align:left">&nbsp;</span><font color="#6495ED" style="background-color:transparent;text-align:left"><b><i>'union()'</i></b></font></div>
+<br>
+	<b><font color="#576dec">•  </font><font color="#ffffff" style="background-color:#688eff">Test for membership</font></b><br>
+<div style="margin-left:20px">
+Testing is a x set a member of  a  s set. Operation can be performed by using operator <font color="#6495ED"><b>'in'</b></font> 
+</div>
+<br>
+	<b><font color="#576dec">•  </font><font color="#ffffff" style="background-color:#688eff">Difference</font></b><br>
+<div style="margin-left:20px">
+Elements included in X set, but not in Y set.<br>
+Operation can be performed by using the ioerator <font color="#6495ED"><b>'-'</b></font> or function <font color="#6495ED"><b><i>'difference()'</i></b></font>
+
+	</div>
+	<br>
+	<b><font color="#576dec">•  </font><font color="#ffffff" style="background-color:#688eff">Symmetric difference</font></b><br>
+<div style="margin-left:20px">
+
+
+	
+The symmetric difference of two sets X and Y is the set of elements which are in either of the sets X or Y but not in both.<br>
+Operation can be performed by using the operator <font color="#6495ED"><b>'^'</b></font> or function <font color="#6495ED"><b><i>'intersection()'</i></b></font>
+
+	</div>
+	
+<br>
+	<b><font color="#576dec">•  </font><font color="#ffffff" style="background-color:#688eff">Subset</font></b><br>
+<div style="margin-left:20px">	
+	The <font color="#6495ED"><b><i>'issubset()'</i></b></font> method returns True if all elements of a set X are present in a set Y.<br>
+	Operation can be performed by using operator  <font color="#6495ED"><b>'&lt;='</b></font><br>
+The <font color="#6495ED"><b><i>'issuperset ()'</i></b></font> method returns True if all elements of a set Y are present in a set Y.<br>
+Operation can be performed by using operator  <font color="#6495ED"><b>'&gt;='</b></font>
+	</div>
+<br>
+	<b><font color="#576dec">•  </font><font color="#ffffff" style="background-color:#688eff">Lenght of set</font></b><br>
+	
+	
+<div style="margin-left:20px">	
+
+
+	
+	Operation can be performed by using function <font color="#6495ED"><b><i>'len ()'</i></b></font>.<br>
+		The function returns the number of items in a set.<br>
+	
+	</div>
+	
+	
+	
+	
+</div>
+	
+	
+
+	
+	
+	</font></td>
+</tr>
+ </tbody>
+</table>
+<table bordercolor="#FFFFFF" style="border:1px solid black;border-color:rgb(136,136,136)">
+ 
+<tbody>
+<tr>
+  
+<td bgcolor="#FFF5EE" style="width:660px;height:80px">
+<br>
+	<font face="Courier new" size="3"> <strong><u><font color="#4207AD" face="Courier new" size="3">Code</font></u></strong><br>
+    
+<br>
+
+	
+X<font color="#cc0000">=</font><i><font color="#0b5394">set</font></i>(<font color="#b45f06">'test'</font>)<br>
+Y<font color="#cc0000">=</font>{<font color="#b45f06">'t'</font>,<font color="#b45f06">'a'</font>,<font color="#b45f06">'m'</font>}<br>
+Z<font color="#cc0000">=</font>{<font color="#b45f06">'e'</font>,<font color="#b45f06">'s'</font>}<br>
+N=</font><i style="font-family:Courier new;font-size:medium"><font color="#0b5394">set</font></i><font face="Courier new" size="3">([<font color="#674ea7">1</font>,<font color="#674ea7">2</font>,<font color="#674ea7">3</font>,<font color="#674ea7">4</font>])<br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'X='</font>, X)<br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Y='</font>,Y)<br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'N='</font>,N)<br>
+N.<font color="#0b5394">add</font>(<font color="#674ea7">5</font>)<br>
+N.<font color="#0b5394">add</font>(<font color="#b45f06">'5'</font>)<br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Add an element (N + 5 + "5") = '</font>, N)<br>
+</font><span style="font-family:Courier new;font-size:medium">N</span>.<font color="#0b5394" style="font-family:Courier new;font-size:medium">add</font><span style="font-family:Courier new;font-size:medium">((</span><font color="#674ea7" style="font-family:Courier new;font-size:medium">1</font><span style="font-family:Courier new;font-size:medium">,&nbsp;</span><font color="#674ea7" style="font-family:Courier new;font-size:medium">2</font><span style="font-family:Courier new;font-size:medium">,&nbsp;</span><font color="#674ea7" style="font-family:Courier new;font-size:medium">3</font><span style="font-family:Courier new;font-size:medium">))</span><font face="Courier new" size="3"><br>
+<font color="#0b5394">
+	print</font>(<font color="#b45f06">'Add a tuple (1, 2, 3) = '</font>, N)<br>
+	
+<font color="#0b5394">print</font>(<font color="#b45f06">'Intersection X and Y ("&amp;") = '</font>,X<font color="#cc0000">&amp;</font>Y) <br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Intersection X and Y ("fun.") = '</font>, X.<font color="#0b5394">intersection</font>(Y))<br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Union X and Y ("|")= '</font>, X<font color="#cc0000">|</font>Y) <br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Union X and Y ("fun.") = '</font>, X.<font color="#0b5394">union</font>(Y))<br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Is Y member of X = '</font>,Y <font color="#cc0000">in</font> X)<br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Is "t" symbol member of X = '</font>,<font color="#b45f06">'t'</font> <font color="#cc0000">in</font> X)<br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Difference X and Y ("-")= '</font>,X<font color="#cc0000">-</font>Y) <br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Difference X and Y ("fun.")= '</font>,X.<font color="#0b5394">difference</font>(Y)) <br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Symmetric difference (XOR) ("^") = '</font>,X<font color="#cc0000">^</font>Y)<br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Symmetric difference ("fun.") = '</font>, X.<font color="#0b5394">symmetric_difference</font>(Y))<br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Z is subset X ("&lt;=") = '</font>,Z<font color="#cc0000">&lt;=</font>X)<br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Z is subset X ("fun.") = '</font>,Z.<font color="#0b5394">issubset</font>(X))<br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'N is subset of range (-5,5) = '</font>, N.<font color="#0b5394">issubset</font>(<font color="#0b5394">range</font>(<font color="#cc0000">-</font><font color="#674ea7">5</font>, <font color="#674ea7">5</font>)))<br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Z is subset Y ("&gt;=")  = '</font>,Y<font color="#cc0000">&gt;=</font><font color="#b45f06">Z)</font><br>
+<font color="#0b5394">print</font><font color="#000000">(</font><font color="#b45f06">'Z is subset Y ("fun.") = '</font>,Y.<font color="#0b5394">issuperset</font>(Z) )<br>
+<font color="#0b5394">print</font>(<font color="#b45f06">'Lenght of N set = '</font>,<font color="#0b5394">len</font>(N))
+		
+</font>
+	</td>
+</tr>
+ </tbody>
+</table>
+<br>
+<b><font color="#006400" face="Book Antique" size="5"><u>Result</u></font></b>
+<div><b><font color="#006400" face="Book Antique" size="5"><u>
+<div style="display:block;text-align:left">
+<div style="display:block;text-align:left">
+<div style="display:block;text-align:left">
+<div style="display:block;text-align:left">
+<div style="display:block;text-align:left"><a href="https://sites.google.com/site/ciscopractic/https-sites-google-com-site-ciscopractic-python/sets/sets4.jpg?attredirects=0" imageanchor="1"><img border="0" src="https://sites.google.com/site/ciscopractic/https-sites-google-com-site-ciscopractic-python/sets/sets4.jpg"></a></div>
+<br>
+</div>
+</div>
+</div>
+</div>
+</u></font></b></div>
+<br>
+<table bordercolor="#FFFFFF" style="border:1px solid black;border-color:rgb(136,136,136)">
+<tbody>
+<tr>
+  
+<td bgcolor="#E6E6FA" style="width:660px;height:15px">  
+<font face="Book Antique" size="5"><font color="#448824">Function: </font> Frozenset()</font>
+
+	
+	
+  </td>
+</tr>
+  
+
+</tbody>
+
+</table>
+<table bordercolor="#FFFFFF" style="border:1px solid black;border-color:rgb(136,136,136)">
+ 
+<tbody>
+<tr>
+  
+<td bgcolor="#FFF5EE" style="width:660px;height:80px"><font face="Courier new" size="3">
+<br>
+	
+	Function <font color="#6495ED" style="background-color:transparent;text-align:left"><b><i>'frozenset()'</i></b></font> is used for:<br>
+<br>
+•	creating immutable sets;<br>
+•	creating sets of sets.<br>
+<br>
+You can perform non-modifying operations on a frozenset.
+
+	
+	
+	</font></td>
+</tr>
+ </tbody>
+</table>
+<table bordercolor="#FFFFFF" style="border:1px solid black;border-color:rgb(136,136,136)">
+ 
+<tbody>
+<tr>
+  
+<td bgcolor="#FFF5EE" style="width:660px;height:80px"><font face="Courier new" size="3">
+
+<strong><u><font color="#4207AD" face="Courier new" size="3">Code</font></u></strong><br>
+<br>
+x1 <font color="#cc0000">=</font> <i><font color="#b45f06">frozenset</font></i>([<font color="#b45f06">'Jane'</font>])<br>
+x2 <font color="#cc0000">=</font>&nbsp;</font><i style="font-family:Courier new;font-size:medium"><font color="#b45f06">frozenset</font></i><font face="Courier new" size="3">([<font color="#b45f06">'Maria'</font>])<br>
+x3 <font color="#cc0000">=</font>&nbsp;</font><i style="font-family:Courier new;font-size:medium"><font color="#b45f06">frozenset</font></i><font face="Courier new" size="3">([<font color="#b45f06">'Dave'</font>])<br>
+x <font color="#cc0000">=</font> {x1, x2, x3}<br>
+<font color="#0b5394">
+print</font>(x)
+
+	
+	
+	</font></td>
+</tr>
+ </tbody>
+</table>
+<br>
+<b><font color="#006400" face="Book Antique" size="5"><u>Result</u></font></b>
+<div><b><font color="#006400" face="Book Antique" size="5"><u>
+<div style="display:block;text-align:left"><a href="https://sites.google.com/site/ciscopractic/https-sites-google-com-site-ciscopractic-python/sets/frozen.jpg?attredirects=0" imageanchor="1"><img border="0" src="https://sites.google.com/site/ciscopractic/https-sites-google-com-site-ciscopractic-python/sets/frozen.jpg"></a></div>
+<br>
+</u></font></b></div>
+<table bordercolor="#FFFFFF" style="border:1px solid black;border-color:rgb(136,136,136)">
+<tbody>
+<tr>
+  
+<td bgcolor="#E6E6FA" style="width:660px;height:15px">  <font face="Book Antique" size="5"><font color="#448824">Set Generator</font> </font>
+  </td>
+</tr>
+  
+
+</tbody>
+
+</table>
+<table bordercolor="#FFFFFF" style="border:1px solid black;border-color:rgb(136,136,136)">
+ 
+<tbody>
+<tr>
+  
+<td bgcolor="#FFF5EE" style="width:660px;height:80px"><font face="Courier new" size="3">
+<div align="justify"><strong><u><font color="#4207AD" face="Courier new" size="3"><br>
+</font></u></strong></div>
+
+
+
+
+<div align="justify">
+
+	
+
+
+	
+New in 3.0<br>
+<br>
+•	Generator for set concluded in curly brackets.<br>
+<br>
+•	As a result you get a set, but not list.<br>
+	
+<div style="margin-left:20px">
+The generator executes loop and get the results of the expression in each iteration. The value in each iteration is obtained due to the variable.
+Result of expression is set.<br>
+<br>
+		<b>Example of expression:</b><br>
+
+ <br>
+<b>Set =</b> <font color="#6495ED"><b>{c * 4 for c in ‘test’}</b></font> . <br>
+ 
+
+		Loop is on the right (<i>for c in ‘test’</i>). New value of iteration is obtained by math expression (on the left «<i>c * 4</i>»). </div>
+
+</div>
+
+	
+
+	
+	
+	</font></td>
+</tr>
+ </tbody>
+</table>
+
+<table bordercolor="#FFFFFF" style="border:1px solid black;border-color:rgb(136,136,136)">
+ 
+<tbody>
+<tr>
+  
+<td bgcolor="#FFF5EE" style="width:660px;height:80px">
+<br>
+	<font face="Courier new" size="3"> <strong><u><font color="#4207AD" face="Courier new" size="3">Code</font></u></strong><br>
+    
+<br>
+
+	
+Set <font color="#cc0000">=</font> {c <font color="#cc0000">*</font> 4 <span style="background-color:#fc2ac7"><font color="#eeeeee">for</font></span> c <font color="#FC2AC7">in</font> <font color="#b45f06">'pyth'</font>} <br>
+<font color="#0b5394">
+	print</font>(Set)<br>
+<font color="#0b5394">
+	print</font>(Set <font color="#cc0000">|</font> {<font color="#b45f06">'ssss'</font>, <font color="#b45f06">'xxxx'</font>})<br>
+<font color="#0b5394">
+	print</font>(Set <font color="#cc0000">&amp;</font> {<font color="#b45f06">'tttt'</font>, <font color="#b45f06">'xxxx'</font>})
+
+		
+</font>
+	</td>
+</tr>
+ </tbody>
+</table>
+<br>
+<b><font color="#006400" face="Book Antique" size="5"><u>Result</u></font></b>
+<div><b><font color="#006400" face="Book Antique" size="5"><u>
+<div style="display:block;text-align:left"><a href="https://sites.google.com/site/ciscopractic/https-sites-google-com-site-ciscopractic-python/sets/gen.jpeg?attredirects=0" imageanchor="1"><img border="0" src="https://sites.google.com/site/ciscopractic/https-sites-google-com-site-ciscopractic-python/sets/gen.jpeg"></a></div>
+<br>
+</u></font></b></div>
+Junior Nurse;
+Senior Nurse;
