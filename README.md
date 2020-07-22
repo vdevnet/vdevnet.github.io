@@ -6,7 +6,9 @@
 
 <font size="2" style="font-family:Courier new"> 
 </font>
-<div align="justify" style="margin-right:10px;margin-left:10px">
+
+
+<div align="justify" style="margin-right:10px;margin-left:10px, background-color:blue">
   
 <p><font face="arial, sans-serif" size="2">Hello!&nbsp;<font color="#444444"><span lang="EN-US" style="line-height:normal;background-image:initial;background-color:transparent;background-repeat:initial">Firstly I would like to
 thank you</span><span style="line-height:normal;background-color:transparent"> for visiting my website.</span></font></font></p>
