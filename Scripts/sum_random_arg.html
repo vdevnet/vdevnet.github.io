@@ -1,0 +1,43 @@
+
+<font size="2" style="font-family:Courier new"> 
+</font>
+
+
+<div align="justify" style="margin-right:10px;margin-left:10px; background-color: #E6E6FA">
+  
+def f(*args):<br>
+	<pre>typ=[]
+	fl=''
+	sm=0
+	ls=[]
+	for x in args:
+		typ.append(type(x))
+
+	if len(typ)==typ.count(typ[0]):
+		if type(args[0]) == str: 
+			print('Все элементы списка имеют одинаковый тип - STRING')
+			for x in args:
+				fl=fl+x
+			print(fl, 'Тип суммы: ',type(fl))
+		elif type(args[0]) == int: 
+			print('Все элементы списка имеют одинаковый тип - INTEGER')
+			for x in args:
+				sm=sm+x
+			print(sm, 'Тип суммы: ',type(sm))
+		elif type(args[0]) == list: 
+			print('Все элементы списка имеют одинаковый тип - LIST')
+			for x in args:
+				ls.append(x)
+			print(ls, 'Тип суммы: ',type(ls))
+
+
+	else: print('ОШИБКА. Указаны элементы с разными типами')
+
+
+f('l','m')
+f(1,2)
+f([1,2],[3,4],[5,6])
+
+</pre>
+</div>
+
