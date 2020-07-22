@@ -1,6 +1,7 @@
 # vdevnet.github.io
 Мой первый опубликованный сайт
 [Урок 13](https://vdevnet.github.io/Scripts/ "Скрипты")
+[Урок 14](https://vdevnet.github.io/Scripts/sum_random_arg.html "Скрипт суммирования")
 
 
 
