@@ -76,38 +76,46 @@ import requests
 import pytz
 from PIL import Image, ImageTk
 
+
 root=Tk()
 root.title("Weather App")
 root.geometry("750x470+300+200")
 root.configure(bg="#57adff")
 root.resizable(False, False)
 
+def kel_cel(k):
+    c = k -273.15
+    return c
+
 def getWeather():
-    city=textfield.get()
+    city = textfield.get()
 
-
-    geolocator=Nominatim(user_agent="geoapiExercises")
+    geolocator = Nominatim(user_agent="geoapiExercises")
     location=geolocator.geocode(city)
     obj=TimezoneFinder()
-    result=obj.timezone_at(lng=location.longitude, lat=location.latitude)
+
+    result = obj.timezone_at(lng=location.longitude, lat=location.latitude)
+
     timezone.config(text=result)
-    long_lat.config(text=f"{round(location.latitude,4)}°N,{round(location.longitude,4)}°E")
+    long_lat.config(text=f"{round(location.latitude, 4)}°N,{round(location.longitude, 4)}°E")
+
+    ##city time--left-hand side
     home=pytz.timezone(result)
     local_time=datetime.now(home)
     current_time=local_time.strftime("%I:%M%p")
     clock.config(text=current_time)
 
-    #weather
-    api = "https://api.openweathermap.org/data/2.5/weather?lat="+str(location.latitude)+"&lon="+str(location.longitude)+"&appid=535f4937ec1f772806bdfd28a8155be1&units=metric"
-    json_data=requests.get(api).json()
+    #weather API
+    api = "https://api.openweathermap.org/data/2.5/forecast?q="+city+"&appid=535f4937ec1f772806bdfd28a8155be1"
+    json_data = requests.get(api).json()
 
     #current
-
-    temp=json_data['main']['temp']
-    humidity=json_data["main"]["humidity"]
-    pressure = json_data["main"]["pressure"]
-    wind=json_data["wind"]["speed"]
-    description=json_data["weather"][0]["description"]
+    temp = json_data['list'][0]['main']['temp']
+    temp=round(kel_cel(temp), 1)#Kelvin to Celsius conversion
+    humidity = json_data['list'][0]['main']['humidity']
+    pressure = json_data['list'][0]['main']['pressure']
+    wind=json_data['list'][0]['wind']["speed"]
+    description=json_data['list'][0]["weather"][0]["description"]
 
     t.config(text=(temp,"°C"))
     h.config(text=(humidity,"%"))
@@ -115,151 +123,145 @@ def getWeather():
     w.config(text=(wind, "m/s"))
     d.config(text=description)
 
+    #delta differences to determine the weather at the same time on other days
 
-    #first cell
-    api2 = "https://api.openweathermap.org/data/2.5/forecast?q="+city+"&appid=535f4937ec1f772806bdfd28a8155be1"
-    json_data2 = requests.get(api2).json()
-
-    date = json_data2['list'][0]["dt_txt"]
+    #get current period
+    date = json_data['list'][0]["dt_txt"]
     timenow = date[11:13]
     timenowi = int(timenow)
-    tmp = 0
-    tmpd=0
-    tmp5 = 0
-    tmpd5=0
 
-    if timenowi==0: #if time now is 00:00
-        tmpd=0 #day temperature
-        tmp = 7 #night temperature
-        tmpd5=0 #temperature today
-        tmp5 = 7 #temperature tonight
+    tmpn = 0 #night temperature
+    tmpd = 0 #day temperature
+    tmpn1 = 0 #temperature today in first big frame
+    tmpd1=0 #temperature today in first big frame
 
-    if timenowi==3: #if time now is 03:00
+    if timenowi==0: #if current period is 00:00
+        tmpd = 0
+        tmpn = 7
+        tmpd1 = 0
+        tmpn1 = 7
+
+    if timenowi==3: #if current period is 03:00
         tmpd = -1
-        tmp=6
-        tmpd5=0
-        tmp5 = 6
+        tmpn = 6
+        tmpd1 = 0
+        tmpn1 = 6
 
-    if timenowi==6:  #if time now is 06:00
+    if timenowi==6:  #if current period is 06:00
         tmpd = -2
-        tmp=5
-        tmpd5=0
-        tmp5 = 5
+        tmpn = 5
+        tmpd1 = 0
+        tmpn1 = 5
 
-    if timenowi==9: #if time now is 09:00
+    if timenowi==9: #if current period is 09:00
         tmpd = -3
-        tmp=4
-        tmpd5=0
-        tmp5 = 4
+        tmpn = 4
+        tmpd1 = 0
+        tmpn1 = 4
 
-    if timenowi==12: #if time now is 12:00
+    if timenowi==12: #if current period is 12:00
         tmpd = -4
-        tmp=3
-        tmpd5=0
-        tmp5 = 3
+        tmpn = 3
+        tmpd1 = 0
+        tmpn1 = 3
 
-    if timenowi==15: #if time now is 15:00
+    if timenowi==15: #if current period is 15:00
         tmpd = -5
-        tmp=2
-        tmpd5=0
-        tmp5 = 2
+        tmpn = 2
+        tmpd1 = 0
+        tmpn1 = 2
 
-    if timenowi==18: #if time now is 18:00
+    if timenowi==18: #if current period is 18:00
         tmpd = -6
-        tmp=1
-        tmpd5=0
-        tmp5 = 1
+        tmpn = 1
+        tmpd1 = 0
+        tmpn1 = 1
 
-    if timenowi==21: #if time now is 21:00
+    if timenowi==21: #if current period is 21:00
         tmpd = -7
-        tmp=0
-        tmpd5=0
-        tmp5 = 0
+        tmpn = 0
+        tmpd1 = 0
+        tmpn1 = 0
 
-    firstdayimage=json_data["weather"][0]["icon"]
-    date2 = json_data2['list'][0]["dt_txt"]
-    #photo1=ImageTk.PhotoImage(file=f"C:/Users/Valya/Desktop/Do2/Python/weather forecast/icon3/{firstdayimage}@2x.png")
-    photo1=ImageTk.PhotoImage(file=f"icon3/{firstdayimage}@2x.png")
+    #first cell
+    firstdayimage = json_data['list'][0]["weather"][0]["icon"]
+
+    photo1=ImageTk.PhotoImage(file=f"icon/{firstdayimage}@2x.png")
     firstimage.config(image=photo1)
     firstimage.image=photo1
 
-    temp1=json_data2['list'][tmp+8]['main']['temp']
-    temp1d=json_data2['list'][tmpd+8]['main']['temp']
-    Degrees1 = str(round(temp1 - 273.15))
-    Degreesd1 = str(round(temp1d - 273.15))
-    day2temp.config(text=f"Day:{Degreesd1}\n Night: {Degrees1}")
+    tempn2 = json_data['list'][tmpn + 8]['main']['temp']
+    tempd2 = json_data['list'][tmpd + 8]['main']['temp']
+    Degreesn2 = round(kel_cel(tempn2), 1)
+    Degreesd2 = round(kel_cel(tempd2), 1)
+    day2temp.config(text=f"Day:{Degreesd2}\n Night: {Degreesn2}")
 
     #second cell
-    seconddayimage=json_data2['list'][8]["weather"][0]["icon"]
+    seconddayimage = json_data['list'][8]["weather"][0]["icon"]
 
-    #img=(Image.open(f"C:/Users/Valya/Desktop/Do2/Python/weather forecast/icon3/{seconddayimage}@2x.png"))
-    img = (Image.open(f"icon3/{seconddayimage}@2x.png"))
+    img = (Image.open(f"icon/{seconddayimage}@2x.png"))
     resized_image=img.resize((50,50))
     photo2=ImageTk.PhotoImage(resized_image)
     secondimage.config(image=photo2)
     secondimage.image=photo2
 
+    tempn3=json_data['list'][tmpn+16]['main']['temp']
+    tempd3=json_data['list'][tmpd+16]['main']['temp']
+    Degreesn3 = round(kel_cel(tempn3), 1)
+    Degreesd3 = round(kel_cel(tempd3), 1)
+    day3temp.config(text=f"Day:{Degreesd3}\n Night: {Degreesn3}")
 
-    temp2=json_data2['list'][tmp+16]['main']['temp']
-    temp2d=json_data2['list'][tmpd+16]['main']['temp']
-    Degrees2 = str(round(temp2 - 273.15))
-    Degreesd2 = str(round(temp2d - 273.15))
-    day3temp.config(text=f"Day:{Degreesd2}\n Night: {Degrees2}")
+    #third cell
+    thirddayimage = json_data['list'][16]["weather"][0]["icon"]
 
-    #
-    # #third cell
-    thirddayimage=json_data2['list'][16]["weather"][0]["icon"]
-
-    #img=(Image.open(f"C:/Users/Valya/Desktop/Do2/Python/weather forecast/icon3/{thirddayimage}@2x.png"))
-    img = (Image.open(f"icon3/{thirddayimage}@2x.png"))
+    img = (Image.open(f"icon/{thirddayimage}@2x.png"))
     resized_image=img.resize((50,50))
     photo3=ImageTk.PhotoImage(resized_image)
     thirdimage.config(image=photo3)
     thirdimage.image=photo3
-    #
 
-    temp3 = json_data2['list'][tmp + 24]['main']['temp']
-    temp3d = json_data2['list'][tmpd + 24]['main']['temp']
-    Degrees3 = str(round(temp3 - 273.15))
-    Degreesd3 = str(round(temp3d - 273.15))
-    day4temp.config(text=f"Day:{Degreesd3}\n Night: {Degrees3}")
+    tempn4=json_data['list'][tmpn+24]['main']['temp']
+    tempd4=json_data['list'][tmpd+24]['main']['temp']
+    Degreesn4 = round(kel_cel(tempn4), 1)
+    Degreesd4 = round(kel_cel(tempd4), 1)
+    day4temp.config(text=f"Day:{Degreesd4}\n Night: {Degreesn4}")
 
-    # #fourth cell
-    fourthdayimage=json_data2['list'][24]["weather"][0]["icon"]
+    #fourth cell
+    fourthdayimage = json_data['list'][24]["weather"][0]["icon"]
 
-    #img=(Image.open(f"C:/Users/Valya/Desktop/Do2/Python/weather forecast/icon3/{fourthdayimage}@2x.png"))
-    img = (Image.open(f"icon3/{fourthdayimage}@2x.png"))
+    img = (Image.open(f"icon/{fourthdayimage}@2x.png"))
     resized_image=img.resize((50,50))
     photo4=ImageTk.PhotoImage(resized_image)
     fouthimage.config(image=photo4)
     fouthimage.image=photo4
 
-    temp4 = json_data2['list'][tmp + 32]['main']['temp']
-    temp4d = json_data2['list'][tmpd + 32]['main']['temp']
-    Degrees4 = str(round(temp4 - 273.15))
-    Degreesd4 = str(round(temp4d - 273.15))
-    day5temp.config(text=f"Day:{Degreesd4}\n Night: {Degrees4}")
+    tempn5=json_data['list'][tmpn+32]['main']['temp']
+    tempd5=json_data['list'][tmpd+32]['main']['temp']
+    Degreesn5 = round(kel_cel(tempn5), 1)
+    Degreesd5 = round(kel_cel(tempd5), 1)
+    day5temp.config(text=f"Day:{Degreesd5}\n Night: {Degreesn5}")
 
-    #
     #fifth cell
-    fifthdayimage=json_data2['list'][0]["weather"][0]["icon"]
+    fifthdayimage = json_data['list'][0]["weather"][0]["icon"]
 
-    #img=(Image.open(f"C:/Users/Valya/Desktop/Do2/Python/weather forecast/icon3/{fifthdayimage}@2x.png"))
-    img = (Image.open(f"icon3/{fifthdayimage}@2x.png"))
-    resized_image=img.resize((50,50))
-    photo5=ImageTk.PhotoImage(resized_image)
+    img = (Image.open(f"icon/{fifthdayimage}@2x.png"))
+    resized_image = img.resize((50, 50))
+    photo5 = ImageTk.PhotoImage(resized_image)
     fifthimage.config(image=photo5)
-    fifthimage.image=photo5
+    fifthimage.image = photo5
 
-    temp0=json_data2['list'][tmp5]['main']['temp']
-    temp0d=json_data2['list'][tmpd5]['main']['temp']
-    Degrees0 = str(round(temp0 - 273.15))
-    Degreesd0 = str(round(temp0d - 273.15))
-    day1temp.config(text=f"Day:{Degreesd0}\n Night: {Degreesd0}")
+    fifthdayimage = json_data['list'][0]["weather"][0]["icon"]
 
-    #days
+    tempn1=json_data['list'][tmpn1]['main']['temp']
+    tempd1=json_data['list'][tmpd1]['main']['temp']
 
-    first = datetime.now()
+    Degreesn1 = round(kel_cel(tempn1), 1)
+    Degreesd1 = round(kel_cel(tempd1), 1)
+    day1temp.config(text=f"Day:{Degreesd1}\n Night: {Degreesn1}")
+
+    #days of the week
+
+    first = datetime.now() #day of the week
     day1.config(text=first.strftime("%A"))
 
     second=first+timedelta(days=1)
@@ -276,11 +278,9 @@ def getWeather():
 
 
 ##icon
-#image_icon=PhotoImage(file="C:/Users/Valya/Desktop/Do2/Python/weather forecast/images/logo.png")
 image_icon=PhotoImage(file="images/logo.png")
 root.iconphoto(False, image_icon)
 
-#Round_box=PhotoImage(file="C:/Users/Valya/Desktop/Do2/Python/weather forecast/images/Rounded Rectangle 1.png")
 Round_box=PhotoImage(file="images/Rounded Rectangle 1.png")
 Label(root,image=Round_box, bg="#57adff").place(x=30, y=110)
 
@@ -301,142 +301,134 @@ label5=Label(root, text="Description", font=('Helvetica', 11), fg="white", bg="#
 label5.place(x=50, y=200)
 
 ##search box
-#Search_image=PhotoImage(file="C:/Users/Valya/Desktop/Do2/Python/weather forecast/images/Search6.png")
 Search_image=PhotoImage(file="images/Search6.png")
 myimage=Label(image=Search_image, bg="#57adff")
 myimage.place(x=270, y=120)
 
-#weat_image=PhotoImage(file="C:/Users/Valya/Desktop/Do2/Python/weather forecast/images/Layer7_11.png")
+##search box------cloud icon in search box
 weat_image=PhotoImage(file="images/Layer7_11.png")
 wethaerimage=Label(root, image=weat_image, bg="#2266aa")
 wethaerimage.place(x=301,y=145)
+
+##search box-------text input
 textfield=tk.Entry(root, justify="center", width=15, font=('poppins', 25, 'bold'), bg="#2266aa", border=0, fg="white")
 textfield.place(x=370, y=144)
 textfield.focus()
 
-#Search_icon=PhotoImage(file="C:/Users/Valya/Desktop/Do2/Python/weather forecast/images/Layer6_6.png")
+#search box-------lens_icon
 Search_icon=PhotoImage(file="images/Layer6_6.png")
 myimage_icon=Button(image=Search_icon, borderwidth=0, cursor="hand2", bg="#2266aa", command=getWeather)
 myimage_icon.place(x=614, y=141)
-
 
 ##Bottom box
 frame=Frame(root, width=900, height=180, bg="#212120")
 frame.pack(side=BOTTOM)
 
 #bottom boxes
-#firstbox=PhotoImage(file="C:/Users/Valya/Desktop/Do2/Python/weather forecast/images/Rounded Rectangle 2.2.png")
 firstbox=PhotoImage(file="images/Rounded Rectangle 2.2.png")
-#secondbox=PhotoImage(file="C:/Users/Valya/Desktop/Do2/Python/weather forecast/images/Rounded Rectangle 2.10 copy.png")
 secondbox=PhotoImage(file="images/Rounded Rectangle 2.10 copy.png")
+Label(frame,image=firstbox, bg="#212120").place(x=30, y=20) #big bottom left box
+Label(frame,image=secondbox, bg="#212120").place(x=300, y=30) #little boxes
+Label(frame,image=secondbox, bg="#212120").place(x=400, y=30)
+Label(frame,image=secondbox, bg="#212120").place(x=500, y=30)
+Label(frame,image=secondbox, bg="#212120").place(x=600, y=30)
 
-Label(frame,image=firstbox, bg="#212120").place(x=30, y=20)
-Label(frame,image=secondbox, bg="#212120").place(x=300, y=30) #place(x=300, y=30)
-Label(frame,image=secondbox, bg="#212120").place(x=400, y=30) #place(x=390, y=30)
-Label(frame,image=secondbox, bg="#212120").place(x=500, y=30) #place(x=480, y=30)
-Label(frame,image=secondbox, bg="#212120").place(x=600, y=30) #(x=570, y=30)
-
-#clock (here we will place time)
+#clock
 clock=Label(root,font=("Helvetica",30,'bold'), fg="white", bg="#57adff")
 clock.place(x=30,y=20)
 
 #timezone
 timezone=Label(root,font=("Helvetica",20), fg="white", bg="#57adff")
-timezone.place(x=510,y=20) #Оригинал timezone.place(x=700,y=20)
+timezone.place(x=510,y=20)
 
 long_lat=Label(root,font=("Helvetica",10), fg="white", bg="#57adff")
 long_lat.place(x=510,y=50)
 
 #thpwd
 t=Label(root, font=("Helvetica", 11), fg="white", bg="#203243")
-t.place(x=150, y=120)
+t.place(x=150, y=120) #Labal for temperature
 h=Label(root, font=("Helvetica", 11), fg="white", bg="#203243")
-h.place(x=150, y=140)
+h.place(x=150, y=140)#Labal for humidity
 p=Label(root, font=("Helvetica", 11), fg="white", bg="#203243")
-p.place(x=150, y=160)
+p.place(x=150, y=160)#Label for pressure
 w=Label(root, font=("Helvetica", 11), fg="white", bg="#203243")
-w.place(x=150, y=180)
+w.place(x=150, y=180)#Label for wind
 d=Label(root, font=("Helvetica", 11), fg="white", bg="#203243")
-d.place(x=150, y=200)
+d.place(x=150, y=200)#Label for description
 
-
+#Labels for placing days of the week
 #first cell
-firstframe=Frame(root,width=230, height=132, bg="#282829")
+firstframe = Frame(root, width=230, height=132, bg="#282829")
 firstframe.place(x=35, y=315)
 
 day1=Label(firstframe, font="arial 20", bg="#282829", fg="#fff")
-#day1.place(x=100, y=5)
 day1.place(x=100, y=5)
 
 firstimage=Label(firstframe, bg="#282829")
 firstimage.place(x=1, y=15)
 
 day1temp=Label(firstframe, bg="#282829", fg="#57adff", font="arial 15 bold")
-#day1temp.place(x=100, y=50)
 day1temp.place(x=90, y=50)
 
 #second cell
-secondframe=Frame(root, width=70, height=115, bg="#282829")
+secondframe = Frame(root, width=70, height=115, bg="#282829")
 secondframe.place(x=305, y=325)
 
-
 day2=Label(secondframe, bg="#282829", fg="#fff")
-day2.place(x=10, y=3)
+day2.place(x=4, y=3)
 
 secondimage=Label(secondframe, bg="#282829")
 secondimage.place(x=7, y=20)
 
 day2temp=Label(secondframe, bg="#282829", fg="#fff")
-day2temp.place(x=10, y=70)
+day2temp.place(x=4, y=70)
 
 #third cell
-thirdframe=Frame(root, width=70, height=115, bg="#282829")
-thirdframe.place(x=405, y=325) #(x=395, y=325)
+thirdframe = Frame(root, width=70, height=115, bg="#282829")
+thirdframe.place(x=405, y=325)  # (x=395, y=325)
 
 day3=Label(thirdframe, bg="#282829", fg="#fff")
-day3.place(x=10, y=3)
+day3.place(x=4, y=3)
 
 thirdimage=Label(thirdframe, bg="#282829")
 thirdimage.place(x=7, y=20)
 
 day3temp=Label(thirdframe, bg="#282829", fg="#fff")
-day3temp.place(x=10, y=70)
+day3temp.place(x=4, y=70)
 
-#fouth cell
-fouthframe=Frame(root, width=70, height=115, bg="#282829")
+#fourth cell
+fouthframe = Frame(root, width=70, height=115, bg="#282829")
 fouthframe.place(x=505, y=325)
 
 day4=Label(fouthframe, bg="#282829", fg="#fff")
-day4.place(x=10, y=3)
+day4.place(x=4, y=3)
 
 fouthimage=Label(fouthframe, bg="#282829")
 fouthimage.place(x=7, y=20)
 
 day4temp=Label(fouthframe, bg="#282829", fg="#fff")
-day4temp.place(x=10, y=70)
+day4temp.place(x=4, y=70)
 
 #fifth cell
-fifthframe=Frame(root, width=70, height=115, bg="#282829")
+fifthframe = Frame(root, width=70, height=115, bg="#282829")
 fifthframe.place(x=605, y=325)
 
 day5=Label(fifthframe, bg="#282829", fg="#fff")
-day5.place(x=10, y=3)
+day5.place(x=4, y=3)
 
 fifthimage=Label(fifthframe, bg="#282829")
 fifthimage.place(x=7, y=20)
 
 day5temp=Label(fifthframe, bg="#282829", fg="#fff")
-day5temp.place(x=10, y=70)
+day5temp.place(x=4, y=70)
 
 root.mainloop()
 
-
-
 </code></pre>
 
-<a href="https://disk.yandex.ru/d/9oN6dZ1BA_hCOg">icon3</a>
-<a href="https://disk.yandex.ru/d/jqmnbvhP5Pzqhw">images</a>
-<a href="https://disk.yandex.ru/d/nMpZArEBuDZPnA">weather.exe</a>
+<a href="https://disk.yandex.ru/d/blsTox5MGvWXxg">icon</a><br>
+<a href="https://disk.yandex.ru/d/jqmnbvhP5Pzqhw">images</a><br>
+<a href="https://disk.yandex.ru/d/tBEDdenlEAxS7g">weather.exe</a><br>
 								</section>
 
 
