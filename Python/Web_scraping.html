@@ -72,12 +72,12 @@ I will use
 <details>
 <summary>Code</summary>
 <pre><code>																
-<font color="#cc7832">import</font> requests #<font color="#8d8c8e">A built-in library for sending HTTP requests</font>
+<font color="#cc7832">import</font> requests <font color="#8d8c8e"># A built-in library for sending HTTP requests</font>
 <font color="#cc7832">from</font> bs4 <font color="#cc7832">import</font> BeautifulSoup #A built-in library for pulling data out of HTML and XML files
-URL = 'https://world-weather.ru/pogoda/russia/moscow/' #Send an HTTP request to the URL of the webpage you want to access
+URL = <font color="#693">'https://world-weather.ru/pogoda/russia/moscow/'</font> #Send an HTTP request to the URL of the webpage you want to access
 page = requests.get(URL) #Send an HTTP GET request and get a webpage. We have a Response object called page
 text = page.content #Accessing the HTML content from webpage
-soup = BeautifulSoup(text, "html.parser") #Specifying the HTML parser
+soup = BeautifulSoup(text,  <font color="#5bae48"> 'html.parser'</font>) #Specifying the HTML parser
 
 #save BeautifulSoup to HTML document
 with open("output.html", "w", encoding='utf-8') as file: #UTF-8 is a byte oriented encoding
