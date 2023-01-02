@@ -70,28 +70,28 @@ I will use
 									<h5>Weather</h5>
 									
 <details>
-<summary>Code</summary>
+<summary>VBA Code</summary>
 <pre><code>																
-<font color="#cc7832">import</font> requests <font color="#8d8c8e"># A built-in library for sending HTTP requests</font>
-<font color="#cc7832">from</font> bs4 <font color="#cc7832">import</font> BeautifulSoup #A built-in library for pulling data out of HTML and XML files
-URL = <font color="#693">'https://world-weather.ru/pogoda/russia/moscow/'</font> #Send an HTTP request to the URL of the webpage you want to access
-page = requests.get(URL) #Send an HTTP GET request and get a webpage. We have a Response object called page
-text = page.content #Accessing the HTML content from webpage
-soup = BeautifulSoup(text,  <font color="#5bae48"> 'html.parser'</font>) #Specifying the HTML parser
 
-#save BeautifulSoup to HTML document
-with open("output.html", "w", encoding='utf-8') as file: #UTF-8 is a byte oriented encoding
-    # prettify the soup object and convert it into a string
-    file.write(str(soup.prettify()))
-#open HTML document
-with open("output.html", "rb") as f:
-    doc = BeautifulSoup(f, "html.parser")
-#I know that the current temperature is located in this div. i found it by CTRL+U
-tag=doc.find("div", {"id": "weather-now-number"})
-temp=tag.text #Reformat bs4.element to plain text
-temp=" ".join(temp.split()) #rid of all repeated spaces and newlines
-temp=temp.replace(" ", "") #Remove all spaces from a string
-print("Current temperature in Moscow = ", temp)
+<font color="##003ac2">Public Sub</font> RunPython()
+    <font color="##003ac2">Dim</font> objShell As Object
+    Set objShell = VBA.CreateObject("Wscript.Shell")
+
+    Dim PythonExe As String
+    PythonExe = """C:\Users\Valya\AppData\Local\Programs\Python\Python38\python.exe"""
+
+    Dim PythonScript As String
+    PythonScript = """C:\Users\Valya\Desktop\Do2\Python\FSTEK\fstek.py"""
+
+    Dim Command As String
+    Command = PythonExe & " " & PythonScript
+
+    objShell.Run Command
+End Sub
+
+
+
+
 
 </code></pre>
 </details>
