@@ -54,20 +54,7 @@
 								
 									<header>
 										<h4><b>Running a Python script using Excel macros</b></h5>
-										<p><b>Discription</b></p>
-<p align="justify">
-I want to find the current temperature.
-I will use 
-</p>
-
-								<img src="/images/Current_temperature.png" alt="" />
 									</header>
-							
-									
-									
-								
-									
-<h5>Weather</h5>
 
 <ol>
 	<li><b>Writing the Python script</b><br>
@@ -89,8 +76,17 @@ I will use
 <li><b>Write the Excel VBA macro</b><br>
 Show the developer tab.<br>
 	Click<b>File</b> > <b>Options</b> > <b>Customize Ribbon</b> > select the <b>Developer</b> check box.
-<img src="/images/Developer_tab.png" border=1px solid #2b2b2b; alt="" />
+<img src="/images/Developer_tab.png" border=2px solid #2b2b2b; alt="" />
+Figure 1: Displaying the Developer tab.
+<br>
+Click the Developer tab.<br>
+On the far-left side click ‘Visual Basic<br>
+Click <b>Insert</b> -> <b>Module</b><br>
+<img src="/images/Module.png" border=2px solid #2b2b2b; alt="" />
+Figure 2:Add VBA script.
 
+<img src="/images/VBA_script.png" border=2px solid #2b2b2b; alt="" />
+Figure 3: This is where you will write your macro.
 	
 <details>
 
@@ -115,9 +111,21 @@ End Sub
 
 </code></pre>
 </details>
-	
-	
 </li>
+
+<li>
+<b>Run the Python script for Excel</b><br>
+Draw a shape on the sheet (<b>Insert</b> tab > <b>Shapes</b> drop-down > <b>Rectangle</b> shape).<br>
+<img src="/images/Rectangle.jpg" border=2px solid #2b2b2b; alt="" />
+Figure 4: Adding the Rectangle.
+Right click on the button and select ‘Assign Macro’.
+<img src="/images/Macro.jpg" border=2px solid #2b2b2b; alt="" />
+Figure 5: Assign a Macro to a Shape.
+<img src="/images/Select_Macro.jpg" border=2px solid #2b2b2b; alt="" />
+Figure 6: Select the macro you want to assign a button to.
+</li>
+
+
 </ol>
 																
 
