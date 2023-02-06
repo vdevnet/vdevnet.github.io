@@ -79,362 +79,355 @@ Steps:<br>
 <details>
 <summary>Code</summary>
 <pre><code>																
+# БИБЛИОТЕКИ
+import os
 from tkinter import *
-import tkinter as tk
-from geopy.geocoders import Nominatim
-from timezonefinder import TimezoneFinder
-from datetime import *
-import requests
-import pytz
-from PIL import Image, ImageTk
-
-
-root=Tk()
-root.title("Weather App")
-root.geometry("750x470+300+200")
-root.configure(bg="#57adff")
-root.resizable(False, False)
-
-def kel_cel(k):
-    c = k -273.15
-    return c
-
-def getWeather():
-    city = textfield.get()
-
-    geolocator = Nominatim(user_agent="geoapiExercises")
-    location=geolocator.geocode(city)
-    obj=TimezoneFinder()
-
-    result = obj.timezone_at(lng=location.longitude, lat=location.latitude)
-
-    timezone.config(text=result)
-    long_lat.config(text=f"{round(location.latitude, 4)}°N,{round(location.longitude, 4)}°E")
-
-    ##city time--left-hand side
-    home=pytz.timezone(result)
-    local_time=datetime.now(home)
-    current_time=local_time.strftime("%I:%M%p")
-    clock.config(text=current_time)
-
-    #weather API
-    api = "https://api.openweathermap.org/data/2.5/forecast?q="+city+"&appid=535f4937ec1f772806bdfd28a8155be1"
-    json_data = requests.get(api).json()
-
-    #current
-    temp = json_data['list'][0]['main']['temp']
-    temp=round(kel_cel(temp), 1)#Kelvin to Celsius conversion
-    humidity = json_data['list'][0]['main']['humidity']
-    pressure = json_data['list'][0]['main']['pressure']
-    wind=json_data['list'][0]['wind']["speed"]
-    description=json_data['list'][0]["weather"][0]["description"]
-
-    t.config(text=(temp,"°C"))
-    h.config(text=(humidity,"%"))
-    p.config(text=(pressure, "hPa"))
-    w.config(text=(wind, "m/s"))
-    d.config(text=description)
-
-    #delta differences to determine the weather at the same time on other days
-
-    #get current period
-    date = json_data['list'][0]["dt_txt"]
-    timenow = date[11:13]
-    timenowi = int(timenow)
-
-    tmpn = 0 #night temperature
-    tmpd = 0 #day temperature
-    tmpn1 = 0 #temperature today in first big frame
-    tmpd1=0 #temperature today in first big frame
-
-    if timenowi==0: #if current period is 00:00
-        tmpd = 0
-        tmpn = 7
-        tmpd1 = 0
-        tmpn1 = 7
-
-    if timenowi==3: #if current period is 03:00
-        tmpd = -1
-        tmpn = 6
-        tmpd1 = 0
-        tmpn1 = 6
-
-    if timenowi==6:  #if current period is 06:00
-        tmpd = -2
-        tmpn = 5
-        tmpd1 = 0
-        tmpn1 = 5
-
-    if timenowi==9: #if current period is 09:00
-        tmpd = -3
-        tmpn = 4
-        tmpd1 = 0
-        tmpn1 = 4
-
-    if timenowi==12: #if current period is 12:00
-        tmpd = -4
-        tmpn = 3
-        tmpd1 = 0
-        tmpn1 = 3
-
-    if timenowi==15: #if current period is 15:00
-        tmpd = -5
-        tmpn = 2
-        tmpd1 = 0
-        tmpn1 = 2
-
-    if timenowi==18: #if current period is 18:00
-        tmpd = -6
-        tmpn = 1
-        tmpd1 = 0
-        tmpn1 = 1
-
-    if timenowi==21: #if current period is 21:00
-        tmpd = -7
-        tmpn = 0
-        tmpd1 = 0
-        tmpn1 = 0
-
-    #first cell
-    firstdayimage = json_data['list'][0]["weather"][0]["icon"]
-
-    photo1=ImageTk.PhotoImage(file=f"icon/{firstdayimage}@2x.png")
-    firstimage.config(image=photo1)
-    firstimage.image=photo1
-
-    tempn2 = json_data['list'][tmpn + 8]['main']['temp']
-    tempd2 = json_data['list'][tmpd + 8]['main']['temp']
-    Degreesn2 = round(kel_cel(tempn2), 1)
-    Degreesd2 = round(kel_cel(tempd2), 1)
-    day2temp.config(text=f"Day:{Degreesd2}\n Night: {Degreesn2}")
+from openpyxl import Workbook, load_workbook
+from tkinter import filedialog as fd
+from textwrap import wrap
+import docx
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.section import WD_SECTION, WD_ORIENT
+from docx.shared import Pt, Cm, Inches
+
+my_list = {}
+
+# ФУНКЦИИ
+def make_rows_bold(*rows):
+    for row in rows:
+        for cell in row.cells:
+            for paragraph in cell.paragraphs:
+                for run in paragraph.runs:
+                    run.font.bold = True
+                    run.font.name = 'Times new Roman'
+                    paragraph.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+# EXCEL ------------------------------------------------------------------------------------------------------------------
+
+#Путь расположению автономного файла
+#Получить текущую директорию расположения программы
+program_path=os.getcwd()
+#Добавить к текущему пути название файла с угрозами
+path=program_path+'\\thrlist.xlsx'
+
+# ФУНКЦИИ -------------------------------------------------------------------------------------------------------------------
+def open_file():
+    browse_text.set("loading ...")
+    # askopenfilename(): открывает диалоговое окно для выбора файла и возвращает путь к выбранному файлу. Если файл не выбран, возвращается пустая строка ""
+    file_name = fd.askopenfilenames()
+    if file_name != "":
+        file_name = ''.join(file_name)
+        get_excel_text(file_name)  # Вызов функции по конвертации Excel в текст
+        label_file["text"] = "Загружен файл: " + file_name
+        # myTuple = ['h', 'e', 'l', 'l', 'o']
+        # s = ''.join(myTuple)
+        browse_text.set("Загружен")
+    else:
+        label_file["text"] = "Файл не загружен"
+        browse_text.set("Загрузить")
+
+
+def get_excel_text(file):
+    wb = load_workbook(file)  # Открыть файл с угрозами
+    #wb = openpyxl.workbook.Workbook(encoding='utf-8')
+    ws = wb.active
+    for i in range(3, ws.max_row + 1):
+        my_listbox.insert(END, "Номер : " + str(ws['A' + str(i)].value)+" Название : "+ws['B' + str(i)].value) #Работает
+        my_list[i] = {}
+        my_list[i]['number'] = str(ws['A' + str(i)].value)
+        #_value = _row[0].value.encode('utf-8')
+        my_list[i]['name'] = ws['B' + str(i)].value
+        my_list[i]['desc'] = ws['C' + str(i)].value.replace('_x000D_','')
+
+
+from docx.oxml import OxmlElement
+
+def select_all():
+
+    result = ''
+    result2 = {}
+    key = 0
+    result2[key] = {}
+
+    doc1 = docx.Document()
+    doc1.add_section(start_type=WD_SECTION.NEW_PAGE)
+    doc1.sections[1].orientation = WD_ORIENT.LANDSCAPE
+    doc1.sections[1].orientation = WD_ORIENT.LANDSCAPE
+    doc1.sections[1].page_width = doc1.sections[0].page_height
+    doc1.sections[1].page_height = doc1.sections[0].page_width
+    doc1.sections[1].bottom_margin = Pt(0)  # Нижний отступ
+
+    for item in my_listbox.curselection():
+        result = result + str(my_listbox.get(item)) + '\n'
+
+    select = list(my_listbox.curselection())
+
+    for i in range(len(select)):
+        result2[key] = {}
+        result2[key]['number'] = my_list[select[i] + 3]['number']
+        result2[key]['name'] = my_list[select[i] + 3]['name']
+        result2[key]['desc'] = my_list[select[i] + 3]['desc']
+        key += 1
+
+
+    # добавляем таблицу 3x3
+    #table = doc1.add_table(rows=6, cols=6)
+    table = doc1.add_table(len(result2)+1, cols=6)
+    # применяем стиль для таблицы
+    table.style = 'Table Grid'
+
+    #пробуем дублирование
+    # set header values
+
+    # заполняем таблицу данными
+
+    table.cell(0, 0).text = "Ид. УБИ"
+    table.cell(0, 1).text = "Наименование УБИ"
+    table.cell(0, 2).text = "Описание"
+    table.cell(0, 3).text = "Источник угрозы"
+    table.cell(0, 4).text = "Объект воздействия"
+    table.cell(0, 5).text = "Оценка актуальности"
+    table.rows[0].cells[0].paragraphs[0].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    table.rows[0].cells[0].paragraphs[0].runs[0].font.name = 'Times new Roman'
+
+    table.autofit = False
+    table.allow_autofit = False
+    table.cell(0, 0).width = Inches(1.0)
+    table.cell(0, 1).width = Inches(2.0)
+    table.cell(0, 2).width = Inches(2.0)
+    table.cell(0, 3).width = Inches(1.0)
+    table.cell(0, 4).width = Inches(1.0)
+    table.cell(0, 5).width = Inches(1.0)
+
+    tbl_header = OxmlElement('w:tblHeader')  # create new oxml element flag which indicates that row is header row
+    first_row_props = table.rows[0]._element.get_or_add_trPr()  # get if exists or create new table row properties el
+    first_row_props.append(tbl_header)  # now first row is the header row
+
+
+    if len(result2)>0:
+        for i in range(0, len(result2)):
+
+            table.cell(i+1, 0).text = result2[i]['number']
+            table.cell(i + 1, 0).paragraphs[0].runs[0].font.name = 'Times new Roman'
+            table.cell(i+1, 1).text = result2[i]['name']
+            table.cell(i + 1, 1).paragraphs[0].runs[0].font.name = 'Times new Roman'
+            table.cell(i + 1, 1).paragraphs[0].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+            table.cell(i+1, 2).text = result2[i]['desc']
+            table.cell(i+1, 2).paragraphs[0].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+            table.cell(i+1, 2).paragraphs[0].runs[0].font.name = 'Times new Roman'
+
+        make_rows_bold(table.rows[0])
+
+    label_save["text"] = "Сохранен файл: " + program_path.replace('\\', '/') + '/table.docx'
+
+    doc1.save('table.docx')
+
+def save_all():
+    if len(my_list) > 0:
+
+        doc1 = docx.Document()
+        doc1.add_section(start_type=WD_SECTION.NEW_PAGE)
+        doc1.sections[1].orientation = WD_ORIENT.LANDSCAPE
+        doc1.sections[1].orientation = WD_ORIENT.LANDSCAPE
+        doc1.sections[1].page_width = doc1.sections[0].page_height
+        doc1.sections[1].page_height = doc1.sections[0].page_width
+        doc1.sections[1].bottom_margin = Pt(0)  # Нижний отступ
+
+        # добавляем таблицу 3x3
+        table = doc1.add_table(rows=len(my_list)+1, cols=6)
+        # применяем стиль для таблицы
+        table.style = 'Table Grid'
+
+        # заполняем таблицу данными
+
+        table.cell(0, 0).text = "Ид. УБИ"
+        table.cell(0, 1).text = "Наименование УБИ"
+        table.cell(0, 2).text = "Описание"
+        table.cell(0, 3).text = "Источник угрозы"
+        table.cell(0, 4).text = "Объект воздействия"
+        table.cell(0, 5).text = "Оценка актуальности"
+        table.rows[0].cells[0].paragraphs[0].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        table.rows[0].cells[0].paragraphs[0].runs[0].font.name = 'Times new Roman'
+
+        tbl_header = OxmlElement('w:tblHeader')  # create new oxml element flag which indicates that row is header row
+        first_row_props = table.rows[
+            0]._element.get_or_add_trPr()  # get if exists or create new table row properties el
+        first_row_props.append(tbl_header)  # now first row is the header row
+
+        table.autofit = False
+        table.allow_autofit = False
+        table.cell(0, 0).width = Inches(1.0)
+        table.cell(0, 1).width = Inches(2.0)
+        table.cell(0, 2).width = Inches(2.0)
+        table.cell(0, 3).width = Inches(1.0)
+        table.cell(0, 4).width = Inches(1.0)
+        table.cell(0, 5).width = Inches(1.0)
+
+        #----------------------------------------------------------------------
+        for i in range(3, (len(my_list)+3)):
+            #print(my_list[i]['number'])
+            table.cell(i-2, 0).text = my_list[i]['number']
+            table.cell(i - 2, 0).paragraphs[0].runs[0].font.name = 'Times new Roman'
+            table.cell(i-2, 1).text = my_list[i]['name']
+            table.cell(i - 2, 1).paragraphs[0].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+            table.cell(i - 2, 1).paragraphs[0].runs[0].font.name = 'Times new Roman'
+            table.cell(i-2, 2).text = my_list[i]['desc']
+            table.cell(i-2, 0).paragraphs[0].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+            table.cell(i-2, 2).paragraphs[0].runs[0].font.name = 'Times new Roman'
+
+        make_rows_bold(table.rows[0])
+        doc1.save('table.docx')
+        label_save["text"] = "Сохранен файл: " + program_path.replace('\\', '/') + '/table.docx'
+
+click_before=()
+click_after=()
+
+
+def CurSelet(evt):
+    global click_before
+    global click_after
+
+    global label_desk
+    global wrapped_text
+    global s
+
+    value = str((my_listbox.get(ACTIVE)))
+
+    if my_listbox.curselection()!=():
+        last_item = my_listbox.curselection()[-1]
+
+        # определение раздницы
+    click_before = click_after
+    click_after = my_listbox.curselection()
+    now_click = (tuple(set(click_before) ^ set(click_after)))
+    text = my_list[now_click[0] + 3]['desc']
+    #text = my_list[3]['desc']
+
+    # Вычисляем среднюю ширину символа #работает
+    average_char_width = label_desk.winfo_width() / len(text)
+
+    # Приблизительно рассчитываем количество символов, которое помещается в окне
+    chars_per_line = int(label_desk.winfo_width() / average_char_width)
+
+    # В цикле уменьшаем это количество, пока текст не станет помещаться
+
+    lent = len(text)
+    if lent < 65:
+        label_desk['text'] = text
+    else:
+        # while chars_per_line > 72: #работает
+        while chars_per_line > 136:
+            wrapped_text = '\n'.join(wrap(text, chars_per_line))
+            # print("wrapped_text = ", wrapped_text, "chars_per_line =", chars_per_line)
+            label_desk['text'] = wrapped_text
+            # root.update()
+            chars_per_line -= 1
+
+        label_desk['text'] = wrapped_text
+
+#создать словарь. Вытащить все в него. И оперировать с описанием
+
+
+def click_button():
+    #os.system('C:/Users/valentinakiseleva/Desktop/2/26.01.2023/table.docx')
+    #label_save["text"] = "Сохранен файл: " + program_path.replace('\\', '/') + '/table.docx'
+    os.system(program_path.replace('\\', '/') + '/table.docx')
+
+# ГРФИЧЕСКИЙ ИНТЕРФЕЙС ----------------------------------------------------------------------------------------------------------
+
+# ГЛАВНОЕ ОКНО
+root = Tk()
+root.title("БДУ Угроз ФСТЭК России")  # Заголовок
+root.geometry("1150x700")  # Ширина/Высота окна
+
+# ГРФИЧЕСКИЕ ОБЪЕКТЫ
+
+# ФРЕЙМ ДЛЯ УГРОЗ С LISTBOX
+my_frame = Frame(
+    root)  # создать объект фрейм от класса Frame и разм на главном окне. Фрейм нужен для группировки объектов
+my_frame.place(x=5, y=120)  #
+
+# LISTBOX С УГРОЗАМИ И СКРОЛОМ
+my_scrollbar = Scrollbar(my_frame, orient=VERTICAL)  # создать объект прокрутки
+my_listbox = Listbox(my_frame, width=180, yscrollcommand=my_scrollbar.set,
+                     selectmode=MULTIPLE)  # создать объект my_listbox и разместить на my_frame
+my_scrollbar.config(command=my_listbox.yview)
+my_scrollbar.pack(side=RIGHT, fill=Y)
+my_listbox.pack(pady=15)
+
+# ФРЕЙМ ДЛЯ LABEL "СПИСОК УГРОЗ"
+labelframe = LabelFrame(root)
+labelframe.place(x=6, y=110)
+# метка "Список угроз"
+label_names = Label(labelframe, text="Список угроз", width=155, bg="#DCDCDC")
+label_names.pack()
+
+# ФРЕЙМ ДЛЯ LABEL "ОПИСАНИЕ УГРОЗЫ"
+labelframe = LabelFrame(root)
+labelframe.place(x=5, y=375)
+# метка с названием "Описание угрозы"
+label_names = Label(labelframe, text="Описание угрозы", width=156, bg="#DCDCDC")
+label_names.pack()
+
+# ФРЕЙМ ДЛЯ LABEL С ТЕКСТОМ ОПИСАНИЯ УГРОЗЫ"
+label_desk = LabelFrame(root)
+label_desk.place(x=5, y=400)
+# метка с описанием угрозы
+label_desk = Label(label_desk, text="Описание угрозы", width=121, height=15,
+                   anchor="nw", font=('times',
+                                      13))  # выровнить текст описания слева вверху, параметр anchor="nw"
+label_desk.pack()
+
+# # ФРЕЙМ ДЛЯ LABEL "ЗАГРУЖАТЬ УГРОЗЫ ИЗ"
+# метка "Список угроз"
+canvas= Canvas(root, bd=2, highlightthickness=2)
+canvas.place(x=5, y=10)
+label2 = Label(canvas, text="Загрузить файл с угрозами", borderwidth=0, font=("Сourier new", 12, 'bold'))
+label2.pack(side=LEFT, padx=0, pady=0)
+
+canvas_file= Canvas(root, bd=2, highlightthickness=2,width=1000, height=5)
+canvas_file.place(x=5, y=40)
+label_file = Label(canvas_file, text="Сейчас файл не загружен", width=1000, height=1, anchor="nw", font=("Сourier new", 10))
+label_file.pack()
+
+
+
+# КНОПКА "Загрузить"
+browse_text = StringVar()
+browse_btn = Button(root, textvariable=browse_text,
+                    command=lambda: open_file(), font=("Сourier new", 12),
+                    bg="#828282", fg="white", height=1, width=15)
+
+browse_text.set("Загрузить")  # set - заносит значение в метапеременную
+# browse_btn.grid(column=4,row=0)
+#browse_btn.place(x=1150, y=120)
+browse_btn.place(x=5, y=70)
+
+"#959d9d"
+
+# КНОПКА "Сохранить выбранные угрозы"
+my_button4=Button(root, text="Сохранить выбранные угрозы", command=select_all, font=("Сourier new", 12),
+                    bg="#828282", fg="white", height=1, width=27)
+my_button4.place(x=5, y=300)
+
+# КНОПКА "Открыть сохраненный документ"
+my_button5=Button(root, text="Открыть сохраненный документ", command=click_button, font=("Сourier new", 12), bg="#828282", fg="white", height=1, width=27)
+my_button5.place(x=270, y=300)
+# КНОПКА "Сохранить все угрозы"
+my_button6=Button(root, text="Сохранить все угрозы", command=save_all, font=("Сourier new", 12),
+                    bg="#828282", fg="white", height=1, width=27)
+my_button6.place(x=535, y=300)
+
+canvas_save= Canvas(root, bd=2, highlightthickness=2,width=1000, height=5)
+canvas_save.place(x=5, y=340)
+label_save = Label(canvas_save, text="Выбранные угрозы не сохранены в файл", width=1000, height=1, anchor="nw", font=("Сourier new", 10))
+label_save.pack()
+
+# ДЕЙСТВИЯ ------------------------------------------
+my_listbox.bind('<<ListboxSelect>>',CurSelet)
+root.mainloop()  # Отрисовка главного окна
 
-    #second cell
-    seconddayimage = json_data['list'][8]["weather"][0]["icon"]
 
-    img = (Image.open(f"icon/{seconddayimage}@2x.png"))
-    resized_image=img.resize((50,50))
-    photo2=ImageTk.PhotoImage(resized_image)
-    secondimage.config(image=photo2)
-    secondimage.image=photo2
-
-    tempn3=json_data['list'][tmpn+16]['main']['temp']
-    tempd3=json_data['list'][tmpd+16]['main']['temp']
-    Degreesn3 = round(kel_cel(tempn3), 1)
-    Degreesd3 = round(kel_cel(tempd3), 1)
-    day3temp.config(text=f"Day:{Degreesd3}\n Night: {Degreesn3}")
-
-    #third cell
-    thirddayimage = json_data['list'][16]["weather"][0]["icon"]
-
-    img = (Image.open(f"icon/{thirddayimage}@2x.png"))
-    resized_image=img.resize((50,50))
-    photo3=ImageTk.PhotoImage(resized_image)
-    thirdimage.config(image=photo3)
-    thirdimage.image=photo3
-
-    tempn4=json_data['list'][tmpn+24]['main']['temp']
-    tempd4=json_data['list'][tmpd+24]['main']['temp']
-    Degreesn4 = round(kel_cel(tempn4), 1)
-    Degreesd4 = round(kel_cel(tempd4), 1)
-    day4temp.config(text=f"Day:{Degreesd4}\n Night: {Degreesn4}")
-
-    #fourth cell
-    fourthdayimage = json_data['list'][24]["weather"][0]["icon"]
-
-    img = (Image.open(f"icon/{fourthdayimage}@2x.png"))
-    resized_image=img.resize((50,50))
-    photo4=ImageTk.PhotoImage(resized_image)
-    fouthimage.config(image=photo4)
-    fouthimage.image=photo4
-
-    tempn5=json_data['list'][tmpn+32]['main']['temp']
-    tempd5=json_data['list'][tmpd+32]['main']['temp']
-    Degreesn5 = round(kel_cel(tempn5), 1)
-    Degreesd5 = round(kel_cel(tempd5), 1)
-    day5temp.config(text=f"Day:{Degreesd5}\n Night: {Degreesn5}")
-
-    #fifth cell
-    fifthdayimage = json_data['list'][0]["weather"][0]["icon"]
-
-    img = (Image.open(f"icon/{fifthdayimage}@2x.png"))
-    resized_image = img.resize((50, 50))
-    photo5 = ImageTk.PhotoImage(resized_image)
-    fifthimage.config(image=photo5)
-    fifthimage.image = photo5
-
-    fifthdayimage = json_data['list'][0]["weather"][0]["icon"]
-
-    tempn1=json_data['list'][tmpn1]['main']['temp']
-    tempd1=json_data['list'][tmpd1]['main']['temp']
-
-    Degreesn1 = round(kel_cel(tempn1), 1)
-    Degreesd1 = round(kel_cel(tempd1), 1)
-    day1temp.config(text=f"Day:{Degreesd1}\n Night: {Degreesn1}")
-
-    #days of the week
-
-    first = datetime.now() #day of the week
-    day1.config(text=first.strftime("%A"))
-
-    second=first+timedelta(days=1)
-    day2.config(text=second.strftime("%A"))
-
-    third=first+timedelta(days=2)
-    day3.config(text=third.strftime("%A"))
-
-    fourth=first+timedelta(days=3)
-    day4.config(text=fourth.strftime("%A"))
-
-    fifth=first+timedelta(days=4)
-    day5.config(text=fifth.strftime("%A"))
-
-
-##icon
-image_icon=PhotoImage(file="images/logo.png")
-root.iconphoto(False, image_icon)
-
-Round_box=PhotoImage(file="images/Rounded Rectangle 1.png")
-Label(root,image=Round_box, bg="#57adff").place(x=30, y=110)
-
-#label
-label1=Label(root, text="Temperature", font=('Helvetica', 11), fg="white", bg="#203243")
-label1.place(x=50, y=120)
-
-label2=Label(root, text="Humidity", font=('Helvetica', 11), fg="white", bg="#203243")
-label2.place(x=50, y=140)
-
-label3=Label(root, text="Pressure", font=('Helvetica', 11), fg="white", bg="#203243")
-label3.place(x=50, y=160)
-
-label4=Label(root, text="Wind Speed", font=('Helvetica', 11), fg="white", bg="#203243")
-label4.place(x=50, y=180)
-
-label5=Label(root, text="Description", font=('Helvetica', 11), fg="white", bg="#203243")
-label5.place(x=50, y=200)
-
-##search box
-Search_image=PhotoImage(file="images/Search6.png")
-myimage=Label(image=Search_image, bg="#57adff")
-myimage.place(x=270, y=120)
-
-##search box------cloud icon in search box
-weat_image=PhotoImage(file="images/Layer7_11.png")
-wethaerimage=Label(root, image=weat_image, bg="#2266aa")
-wethaerimage.place(x=301,y=145)
-
-##search box-------text input
-textfield=tk.Entry(root, justify="center", width=15, font=('poppins', 25, 'bold'), bg="#2266aa", border=0, fg="white")
-textfield.place(x=370, y=144)
-textfield.focus()
-
-#search box-------lens_icon
-Search_icon=PhotoImage(file="images/Layer6_6.png")
-myimage_icon=Button(image=Search_icon, borderwidth=0, cursor="hand2", bg="#2266aa", command=getWeather)
-myimage_icon.place(x=614, y=141)
-
-##Bottom box
-frame=Frame(root, width=900, height=180, bg="#212120")
-frame.pack(side=BOTTOM)
-
-#bottom boxes
-firstbox=PhotoImage(file="images/Rounded Rectangle 2.2.png")
-secondbox=PhotoImage(file="images/Rounded Rectangle 2.10 copy.png")
-Label(frame,image=firstbox, bg="#212120").place(x=30, y=20) #big bottom left box
-Label(frame,image=secondbox, bg="#212120").place(x=300, y=30) #little boxes
-Label(frame,image=secondbox, bg="#212120").place(x=400, y=30)
-Label(frame,image=secondbox, bg="#212120").place(x=500, y=30)
-Label(frame,image=secondbox, bg="#212120").place(x=600, y=30)
-
-#clock
-clock=Label(root,font=("Helvetica",30,'bold'), fg="white", bg="#57adff")
-clock.place(x=30,y=20)
-
-#timezone
-timezone=Label(root,font=("Helvetica",20), fg="white", bg="#57adff")
-timezone.place(x=510,y=20)
-
-long_lat=Label(root,font=("Helvetica",10), fg="white", bg="#57adff")
-long_lat.place(x=510,y=50)
-
-#thpwd
-t=Label(root, font=("Helvetica", 11), fg="white", bg="#203243")
-t.place(x=150, y=120) #Labal for temperature
-h=Label(root, font=("Helvetica", 11), fg="white", bg="#203243")
-h.place(x=150, y=140)#Labal for humidity
-p=Label(root, font=("Helvetica", 11), fg="white", bg="#203243")
-p.place(x=150, y=160)#Label for pressure
-w=Label(root, font=("Helvetica", 11), fg="white", bg="#203243")
-w.place(x=150, y=180)#Label for wind
-d=Label(root, font=("Helvetica", 11), fg="white", bg="#203243")
-d.place(x=150, y=200)#Label for description
-
-#Labels for placing days of the week
-#first cell
-firstframe = Frame(root, width=230, height=132, bg="#282829")
-firstframe.place(x=35, y=315)
-
-day1=Label(firstframe, font="arial 20", bg="#282829", fg="#fff")
-day1.place(x=100, y=5)
-
-firstimage=Label(firstframe, bg="#282829")
-firstimage.place(x=1, y=15)
-
-day1temp=Label(firstframe, bg="#282829", fg="#57adff", font="arial 15 bold")
-day1temp.place(x=90, y=50)
-
-#second cell
-secondframe = Frame(root, width=70, height=115, bg="#282829")
-secondframe.place(x=305, y=325)
-
-day2=Label(secondframe, bg="#282829", fg="#fff")
-day2.place(x=4, y=3)
-
-secondimage=Label(secondframe, bg="#282829")
-secondimage.place(x=7, y=20)
-
-day2temp=Label(secondframe, bg="#282829", fg="#fff")
-day2temp.place(x=4, y=70)
-
-#third cell
-thirdframe = Frame(root, width=70, height=115, bg="#282829")
-thirdframe.place(x=405, y=325)  # (x=395, y=325)
-
-day3=Label(thirdframe, bg="#282829", fg="#fff")
-day3.place(x=4, y=3)
-
-thirdimage=Label(thirdframe, bg="#282829")
-thirdimage.place(x=7, y=20)
-
-day3temp=Label(thirdframe, bg="#282829", fg="#fff")
-day3temp.place(x=4, y=70)
-
-#fourth cell
-fouthframe = Frame(root, width=70, height=115, bg="#282829")
-fouthframe.place(x=505, y=325)
-
-day4=Label(fouthframe, bg="#282829", fg="#fff")
-day4.place(x=4, y=3)
-
-fouthimage=Label(fouthframe, bg="#282829")
-fouthimage.place(x=7, y=20)
-
-day4temp=Label(fouthframe, bg="#282829", fg="#fff")
-day4temp.place(x=4, y=70)
-
-#fifth cell
-fifthframe = Frame(root, width=70, height=115, bg="#282829")
-fifthframe.place(x=605, y=325)
-
-day5=Label(fifthframe, bg="#282829", fg="#fff")
-day5.place(x=4, y=3)
-
-fifthimage=Label(fifthframe, bg="#282829")
-fifthimage.place(x=7, y=20)
-
-day5temp=Label(fifthframe, bg="#282829", fg="#fff")
-day5temp.place(x=4, y=70)
-
-root.mainloop()
 
 </code></pre>
 </details>
