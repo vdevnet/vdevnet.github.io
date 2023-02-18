@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Excel</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1></h1>
+						<nav id="nav">
+							<ul>
+								<li class="special">
+									<a href="#menu" class="menuToggle"><span>Menu</span></a>
+									<div id="menu">
+										<ul>
+											 <li><a href="/Python/example.html">Python</a></li>
+											<li><a href="/About_me.html">About me</a></li>
+										</ul>
+									</div>
+								</li>
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Main -->
+					<article id="main">
+						<header>
+							<h2>Excel</h2>
+							<p>Extracting Data from HTML with BeautifulSoup</p>
+						</header>
+						<section class="wrapper style5">
+							<div class="inner">
+
+								<section>
+									
+									<hr />
+					
+								
+									<header>
+										<h4><b>Simple examples</b></h5>
+									</header>
+
+<ol>
+	<li><b>Writing the Python script</b><br>
+		Create a simple Python script.
+	</li>
+
+
+
+								
+<details>
+<summary> <font color="#cb602d">A Python code</font></summary>
+<pre><code>
+<font color="#5b5bad">print</font>(<font color="#4b7758">"hello"</font>)
+<font color="#5b5bad">input</font>(<font color="#4b7758">"hello, press enter"</font>)
+</code></pre>
+</details>
+
+<br>
+<li><b>Write the Excel VBA macro</b><br>
+Show the developer tab.<br>
+	Click<b>File</b> > <b>Options</b> > <b>Customize Ribbon</b> > select the <b>Developer</b> check box.
+<img src="/images/Developer_tab.png" border=2px solid #2b2b2b; alt="" />
+<br>
+Figure 1: Displaying the Developer tab.
+<br>
+<br>
+Click the Developer tab.<br>
+On the far-left side click ‘Visual Basic<br>
+Click <b>Insert</b> -> <b>Module</b><br>
+<img src="/images/Module.png" border=2px solid #2b2b2b; alt="" />
+<br>
+Figure 2:Add VBA script.
+<br>
+<br>
+<img src="/images/VBA_script.png" border=2px solid #2b2b2b; alt="" />
+<br>
+Figure 3: This is where you will write your macro.
+<br>
+<details>
+
+	<summary><font color="#cb602d">VBA Code</font></summary>
+<pre><code>																
+
+<font color="#003ac2">Public Sub</font> RunPython()
+    <font color="#003ac2">Dim</font> objShell <font color="#003ac2">As Object</font>
+    <font color="#003ac2">Set</font> objShell = VBA.CreateObject("Wscript.Shell")
+
+    <font color="#003ac2">Dim</font> PythonExe <font color="#003ac2">As String</font>
+    PythonExe = """C:\Users\Valya\AppData\Local\Programs\Python\Python38\python.exe"""
+
+    <font color="#003ac2">Dim</font> PythonScript <font color="#003ac2">As String</font>
+    PythonScript = """C:\Users\Valya\Desktop\Do2\Python\FSTEK\Hello.py"""
+
+    <font color="#003ac2">Dim</font> Command <font color="#003ac2">As String</font>
+    Command = PythonExe & " " & PythonScript
+
+    objShell.Run Command
+<font color="#003ac2">End Sub</font>
+
+</code></pre>
+</details>
+</li>
+<br>
+<li>
+<b>Run the Python script for Excel</b><br>
+Draw a shape on the sheet (<b>Insert</b> tab > <b>Shapes</b> drop-down > <b>Rectangle</b> shape).<br>
+<img src="/images/Rectangle.jpg" border=2px solid #2b2b2b; alt="" />
+<br><br>
+Figure 4: Adding the Rectangle.
+<br><br>
+Right click on the button and select ‘Assign Macro’.<br>
+<img src="/images/Macro.jpg" border=2px solid #2b2b2b; alt="" />
+<br>
+Figure 5: Assign a Macro to a Shape.<br><br>
+<img src="/images/Select_Macro.jpg" border=2px solid #2b2b2b; alt="" />
+<br>
+Figure 6: Select the macro you want to assign a button to.
+</li>
+
+
+</ol>
+																
+
+									
+<hr />								
+								
+								</section>
+			
+							</div>
+
+						</section>
+
+					</article>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<ul class="icons">
+							<li><a href="https://www.facebook.com/valya.guitar" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="mailto:vel.kiseleva@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+							<li><a href="https://www.linkedin.com/in/valentina-kiseleva-013782bb" class="fab fa-linkedin-in"><span class="label"></span></a></li>
+							<li><a href="https://t.me/vDevOps" class="fab fab fa-telegram"><span class="label"></span></a></li>
+						</ul>
+						<ul class="copyright">
+							<li>&copy; Untitled</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+						</ul>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="/assets/js/jquery.min.js"></script>
+			<script src="/assets/js/jquery.scrollex.min.js"></script>
+			<script src="/assets/js/jquery.scrolly.min.js"></script>
+			<script src="/assets/js/browser.min.js"></script>
+			<script src="/assets/js/breakpoints.min.js"></script>
+			<script src="/assets/js/util.js"></script>
+			<script src="/assets/js/main.js"></script>
+
+	</body>
+</html>
+
