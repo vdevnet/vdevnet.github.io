@@ -87,66 +87,31 @@ It is believed that any two elements that are equal to each other form one pair,
 
 	<summary><font color="#cb602d">C++Code</font></summary>
 <pre><code>																
-
 #include <iostream>
 #include <vector> 
 using namespace std;
-
 int main( void ) {
  int N;
-  cin >> N; //Count of numbers
+  cin >> N;
     
+int A[N]={1, 2, 3, 2 ,3};
 vector <int> b(N);
-vector <int> A(N);
 for(int i = 0; i < N; i++)
 cin >> A[i];
-
-
 int seen[N];
 for(int i = 0; i < N; i++)
 seen[i] = 0;
-
-
-
-for(int i = 0; i < N; i++) 
-{
-    cout <<"i = "<< i<<endl;
-    
-    //Сheck "seen" array elements
-    for(int i = 0; i < N; i++) 
-            {
-                 cout << "seen_before=" <<seen[i] <<endl;
-            }
-    
-    
-    
-    if(seen[i] == 0) 
-    {
-       int count = 0;
-       for(int j = i; j < N; j++) //0 до 4 включительно
-           if(A[j] == A[i]) 
-            {
-              count += 1;
-              seen[j] = 1;
-            }
-            
-            
-             for(int i = 0; i < N; i++) 
-            {
-                 cout << "seen_after=" <<seen[i] <<endl;
-            }
-
-      b[i]=count;
-       for(int i = 0; i < N; i++) 
-            {
-                 cout << "b_after=" <<b[i] <<endl;
-            }
-    }
+for(int i = 0; i < N; i++) {
+if(seen[i] == 0) {
+int count = 0;
+for(int j = i; j < N; j++)
+if(A[j] == A[i]) {
+count += 1;
+seen[j] = 1;
 }
-
-
-//If the number of one element is more than one, then I can make a pair
-
+b[i]=count;
+}
+}
 int s=0;
  for (int i = 0; i < N; i++) {
         if (b[i]>1) {
@@ -156,24 +121,17 @@ int s=0;
     cout  << s;
 return 0;
 }
-
 </code></pre>
 </details>
-
-
 																
-
 									
 <hr />								
 								
 								</section>
 			
 							</div>
-
 						</section>
-
 					</article>
-
 				<!-- Footer -->
 					<footer id="footer">
 						<ul class="icons">
@@ -186,9 +144,7 @@ return 0;
 							<li>&copy; Untitled</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
 						</ul>
 					</footer>
-
 			</div>
-
 		<!-- Scripts -->
 			<script src="/assets/js/jquery.min.js"></script>
 			<script src="/assets/js/jquery.scrollex.min.js"></script>
@@ -197,7 +153,5 @@ return 0;
 			<script src="/assets/js/breakpoints.min.js"></script>
 			<script src="/assets/js/util.js"></script>
 			<script src="/assets/js/main.js"></script>
-
 	</body>
 </html>
-
