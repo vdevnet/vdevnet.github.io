@@ -66,7 +66,10 @@ It is believed that any two elements that are equal to each other form one pair,
 <br>
 <ul>
 <li>The array <font color="#238C47">"seen"</font> is used to find duplicate numbers in a list of elements.</li>
-	<li>I used the formula <b>n(n−1)/2</b> for the number of pairs from an <b>n</b> element. </li>
+	<li>I used the formula <b>n(n−1)/2</b> for the number of pairs from an <b>n</b> element. <br>
+	
+	
+	</li>
 </ul>	
 
 <b><font color="#4D54D8"> For example:</font></b> <br>
@@ -91,28 +94,58 @@ using namespace std;
 
 int main( void ) {
  int N;
-  cin >> N;
+  cin >> N; //Count of numbers
     
-int A[N]={1, 2, 3, 2 ,3};
 vector <int> b(N);
+vector <int> A(N);
 for(int i = 0; i < N; i++)
 cin >> A[i];
+
+
 int seen[N];
 for(int i = 0; i < N; i++)
 seen[i] = 0;
 
-for(int i = 0; i < N; i++) {
-if(seen[i] == 0) {
-int count = 0;
-for(int j = i; j < N; j++)
-if(A[j] == A[i]) {
-count += 1;
-seen[j] = 1;
+
+
+for(int i = 0; i < N; i++) 
+{
+    cout <<"i = "<< i<<endl;
+    
+    //Сheck "seen" array elements
+    for(int i = 0; i < N; i++) 
+            {
+                 cout << "seen_before=" <<seen[i] <<endl;
+            }
+    
+    
+    
+    if(seen[i] == 0) 
+    {
+       int count = 0;
+       for(int j = i; j < N; j++) //0 до 4 включительно
+           if(A[j] == A[i]) 
+            {
+              count += 1;
+              seen[j] = 1;
+            }
+            
+            
+             for(int i = 0; i < N; i++) 
+            {
+                 cout << "seen_after=" <<seen[i] <<endl;
+            }
+
+      b[i]=count;
+       for(int i = 0; i < N; i++) 
+            {
+                 cout << "b_after=" <<b[i] <<endl;
+            }
+    }
 }
 
-b[i]=count;
-}
-}
+
+//If the number of one element is more than one, then I can make a pair
 
 int s=0;
  for (int i = 0; i < N; i++) {
