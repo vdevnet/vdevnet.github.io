@@ -136,7 +136,94 @@ return 0;
 <span class="image left"><img src="/images/IP.png" height: auto alt="" /></span>
 	
 The program receives a string of arbitrary characters as input.
+If this string is a valid IP address, programm prints YES else NO.
 </p>
+
+<details>
+
+	<summary><font color="#cb602d">C++Code</font></summary>
+<pre><code>																
+<font color="#4E5754">#include </font> <font color="#BF7130">&ltiostream&gt</font>
+<font color="#4E5754">#include </font> <font color="#BF7130">&ltstring&gt</font>
+<font color="#1b4fe4">using namespace</font> std;
+int main()
+{
+    string s;
+    getline(cin, s);
+    
+    char p = '.';
+    char d = s[0];
+    int h = 0;
+    for (auto d : s)
+        if (d == p)
+            h++;
+    if (h==0) {
+        cout << "NO";
+        return 0;
+    }
+    
+    
+    
+    
+    int first_dot = s.find_first_of("."); 
+    string first_oct= s.substr(0, first_dot); 
+    for (int i = 0; i < first_oct.length(); i++)
+    {
+        if (isdigit(first_oct[i])!=1) {
+            cout << "NO";
+            return 0;
+        }
+    }
+    
+    int second_dot = s.find_first_of(".", first_dot + 1);
+    
+    string second_oct= s.substr(first_dot+1, (second_dot-first_dot-1)); 
+    for (int i = 0; i < second_oct.length(); i++)
+    {
+        if (isdigit(second_oct[i])!=1) {
+            cout << "NO";
+            return 0;
+        }
+    }
+    
+    
+    int third_dot = s.find_first_of(".", second_dot + 1);
+    string third_oct= s.substr(second_dot+1, ((third_dot-second_dot)-1)); 
+    
+    for (int i = 0; i < third_oct.length(); i++)
+    {
+        if (isdigit(third_oct[i])!=1) {
+            cout << "NO";
+            return 0;
+        }
+    }
+    
+    
+    string fourth_oct= s.substr(third_dot+1, ((third_dot-second_dot)-1));
+    for (int i = 0; i < fourth_oct.length(); i++)
+    {
+        if (isdigit(fourth_oct[i])!=1) {
+            cout << "NO";
+            return 0;
+        }
+    }
+    
+int first_dig = stoi(first_oct);
+int second_dig = stoi(second_oct);
+int third_dig = stoi(third_oct);
+int fourth_dig = stoi(fourth_oct);
+
+  if ((first_dig<=255)&&(second_dig<=255)&&(third_dig<=255)&&(fourth_dig<=255)){
+      cout <<"YES";
+  }
+  else {
+      cout <<"NO";
+  }
+    
+    return 0;
+}
+</code></pre>
+</details>
 
 </section>
 
