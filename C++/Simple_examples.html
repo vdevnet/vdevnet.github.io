@@ -243,93 +243,61 @@ int fourth_dig = stoi(fourth_oct);
 <span class="image left"><img src="/images/sphere.jpg" height: auto alt="" /></span>
 	
 Does the point A(xa,ya) belong to one of the two regions bounded by a circle and two straight lines? <br>
-Equations of the straight line y=kx+b; By the cells, we determine that the equation of a straight line at 45 degrees: y1 = -x; second: y2 = 2x+2.
-Equation of a circle, given that the coordinates of the center and the radius are (-1,1) and 2, respectively: (x+1)^2 + (y-1)^2 = 4
+	Equations of the straight line <b>y=kx+b</b>; By the cells, we determine that the equation of a straight line at 45 degrees: <b>y1 = -x</b>; second: <b>y2 = 2x+2</b>.
+Equation of a circle, given that the coordinates of the center and the radius are (-1,1) and 2, respectively: <b>(x+1)^2 + (y-1)^2 = 4 </b>
 
-I used two interesting functions for this code: stoi() and isdigit().<br><br>
-<ul>
- <li>the <font color="#238C47">stoi()</font> function converts a string to an integer value. </li>
- <li>The <font color="#238C47">isdigit()</font> function, declared in the <cctype> header file in C++, is used to determine whether the provided character represents a decimal digit. 
- It returns 1(non-zero) if the provided character is a digit, 0 otherwise</li>
-
-</ul>
 </p>
 
 <details>
 
 	<summary><font color="#cb602d">C++Code</font></summary>
 <pre><code>																
-<font color="#4E5754">#include </font> <font color="#BF7130">&ltiostream&gt</font>
-<font color="#4E5754">#include </font> <font color="#BF7130">&ltstring&gt</font>
-<font color="#1b4fe4">using namespace</font> std;
+
+#include <iostream>
+using namespace std;
+#include <cmath>
+bool isPointInSquare(float xa, float ya) {
+    bool flag;
+    float part1;
+    float part2;
+    flag = true;
+    if (ya >= 0) {
+        if (
+            (((xa + 1) * (xa + 1) + (ya - 1) * (ya - 1)) <= 4) and
+            (ya >= -xa) and
+            (ya >= ((2 * (xa)) + 2))
+            )
+        {
+            flag = true;
+        }
+        else {
+            flag = false;
+        }
+    }
+    else {
+        if (
+            (((xa + 1) * (xa + 1) + (ya - 1) * (ya - 1)) >= 4) and
+            (ya <= -xa) and
+            (ya <= ((2 * (xa)) + 2))
+            )
+        {
+            flag = true;
+        }
+        else {
+            flag = false;
+        }
+    }
+    return flag;
+}
 int main()
 {
-    string s;
-    getline(cin, s);
-    
-    char p = '.';
-    char d = s[0];
-    int h = 0;
-    for (auto d : s)
-        if (d == p)
-            h++;
-    if (h==0) {
-        cout << "NO";
-        return 0;
-    }
-
-    int first_dot = s.find_first_of("."); 
-    string first_oct= s.substr(0, first_dot); 
-    for (int i = 0; i < first_oct.length(); i++)
-    {
-        if (isdigit(first_oct[i])!=1) {
-            cout << "NO";
-            return 0;
-        }
-    }
-    int second_dot = s.find_first_of(".", first_dot + 1);
-    
-    string second_oct= s.substr(first_dot+1, (second_dot-first_dot-1)); 
-    for (int i = 0; i < second_oct.length(); i++)
-    {
-        if (isdigit(second_oct[i])!=1) {
-            cout << "NO";
-            return 0;
-        }
-    }
-    int third_dot = s.find_first_of(".", second_dot + 1);
-    string third_oct= s.substr(second_dot+1, ((third_dot-second_dot)-1)); 
-    
-    for (int i = 0; i < third_oct.length(); i++)
-    {
-        if (isdigit(third_oct[i])!=1) {
-            cout << "NO";
-            return 0;
-        }
-    }
-    string fourth_oct= s.substr(third_dot+1, ((third_dot-second_dot)-1));
-    for (int i = 0; i < fourth_oct.length(); i++)
-    {
-        if (isdigit(fourth_oct[i])!=1) {
-            cout << "NO";
-            return 0;
-        }
-    }
-    
-int first_dig = stoi(first_oct);
-int second_dig = stoi(second_oct);
-int third_dig = stoi(third_oct);
-int fourth_dig = stoi(fourth_oct);
-
-  if ((first_dig<=255)&&(second_dig<=255)&&(third_dig<=255)&&(fourth_dig<=255)){
-      cout <<"YES";
-  }
-  else {
-      cout <<"NO";
-  }
-    
+    float xa, ya;
+    cin >> xa >> ya;
+    (isPointInSquare(xa, ya)) ? cout << "YES" : cout << "NO";
     return 0;
 }
+
+
 </code></pre>
 </details>
 
