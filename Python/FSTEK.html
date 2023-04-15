@@ -83,14 +83,14 @@ When you click on the "Open saved document" button, the doc file will automatica
 <details>
 <summary>Code</summary>
 <pre><code>																
-# БИБЛИОТЕКИ
-import os
-from tkinter import *
+#LIBRARIES
+import os #operating system module
+from tkinter import * #Graphical User Interfaces
 from openpyxl import Workbook, load_workbook
 from tkinter import filedialog as fd
 from textwrap import wrap
 import docx
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.text import WD_ALIGN_PARAGRAPH #Specifies the start type of a section break
 from docx.enum.section import WD_SECTION, WD_ORIENT
 from docx.shared import Pt, Cm, Inches
 
@@ -123,6 +123,8 @@ def open_file():
         file_name = ''.join(file_name)
         get_excel_text(file_name)  # Вызов функции по конвертации Excel в текст
         label_file["text"] = "Загружен файл: " + file_name
+        # myTuple = ['h', 'e', 'l', 'l', 'o']
+        # s = ''.join(myTuple)
         browse_text.set("Загружен")
     else:
         label_file["text"] = "Файл не загружен"
@@ -426,10 +428,8 @@ label_save = Label(canvas_save, text="Выбранные угрозы не со�
 label_save.pack()
 
 # ДЕЙСТВИЯ ------------------------------------------
-my_listbox.bind('&laquo;ListboxSelect&raquo;',CurSelet)
+my_listbox.bind('<<ListboxSelect>>',CurSelet)
 root.mainloop()  # Отрисовка главного окна
-
-
 
 </code></pre>
 </details>
