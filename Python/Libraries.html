@@ -51,7 +51,7 @@
 					
 								
 									<header>
-										<h1>Requests</h3>
+										<h1>Requests</h1>
 										<h2>Request status</h2>
 										<p><b>Discription</b></p>
 <p align="justify">
@@ -139,6 +139,7 @@ tk.mainloop()
 <p align="justify">
 	<span class="image left"><img src="/images/info.png" height: auto alt="" /></span>
 This is an interesting example. You can get header information from inside the organization. The code uses a proxy. <br>
+I made a small dictionary with deciphering fields with header meanings.
 
 </p>
 
@@ -149,7 +150,6 @@ This is an interesting example. You can get header information from inside the o
 <pre><code>																
 
 <font color="#963">import</font> requests
-
 proxies = {'http': 'http://10.105.0.200:3128'}
 s = requests.session()
 s.proxies.update(proxies)
@@ -159,6 +159,7 @@ k=resp.headers
 Ks=list(k.keys())
 
 description={
+<font color="#663">
 'A-IM':'Acceptable instance-manipulations for the request.',
 'Accept':'Media type(s) that is/are acceptable for the response.',
 'Accept-Charset':'Character sets that are acceptable.',
@@ -199,7 +200,7 @@ description={
 'User-Agent':'The user agent string of the user agent.',
 'Upgrade':'Ask the server to upgrade to another protocol. Must not be used in HTTP/2.',
 'Via':'Informs the server of proxies through which the request was sent.',
-'Warning':'A general warning about possible problems with the entity body.'}
+'Warning':'A general warning about possible problems with the entity body.'</font>}
 
 print("HEADERS:")
 print(120*"-")
