@@ -213,6 +213,42 @@ for key in k:
 </code></pre>
 </details>
 
+<hr/>
+<header>
+										
+										<h2>Authentication</h2>
+										<p><b>Discription</b></p>
+<p align="justify">
+	<span class="image left"><img src="/images/authentic.png" height: auto alt="" /></span>
+My example with authentication. <br>
+Enter the webside URL. <br>
+The HTTP 200 OK success status response code indicates that the request has succeeded. 
+</p>
+
+								<img src="/images/requests_2.png" alt="" />
+									</header>					
+<details>
+<summary>Code</summary>
+<pre><code>																
+import requests
+import fake_useragent
+
+user=fake_useragent.UserAgent().random
+header={'user-agent':user}
+
+loginurl=('https://the-internet.herokuapp.com/authenticate')
+payload={
+    'username': 'tomsmith',
+    'password':'SuperSecretPassword!'
+}
+r=requests.post(loginurl, data=payload, headers=header)
+print(r.text)
+
+</code></pre>
+</details>
+									
+<hr />
+		
 
 								
 								</section>
