@@ -450,6 +450,7 @@ By this code you can download the list of threats from the Internet or the corpo
 <ul>
    <li>Сertificate verification is skipped.</li>
    <li>URL validation and download file type check added.</li>
+   <li>The program will show the directory of the downloaded file.</li>
 </ul>
 <img src="/images/FSTEK-URL.png"  alt="" /> <br>
 </p>
@@ -533,7 +534,7 @@ def click_button():
             # если ответ успешен, исключения задействованы не будут
             req.raise_for_status()
         except Exception as err:
-            proxies = {'https': 'http://10.15.10.210:3128'}
+            proxies = {'https': 'http://10.105.0.217:3128'}
             req = requests.session()
             req.proxies.update(proxies)
             req_get = req.get(downloadurl, headers={'User-agent': 'your bot 0.1'},
@@ -543,6 +544,7 @@ def click_button():
         # else выполняется в случае успеха в блоке try
         else:
             loadfromweb(req, downloadurl)  # В функцию  loadfromweb передается req - запрос
+            lab_file2["text"] = "Файл загружен в директорию " + os.getcwd()
 
     else:
         #print("No")
