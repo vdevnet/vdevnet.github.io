@@ -1,8 +1,12 @@
 <!DOCTYPE HTML>
-
+<!--
+	Spectral by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
 <html>
 	<head>
-		<title>Python</title>
+		<title>Network configuration</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
         <link rel="stylesheet" href="/assets/css/main.css" />
@@ -15,15 +19,14 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="/index.html">Main page</a></h1>
+						<h1><a href="index.html">Spectral</a></h1>
 						<nav id="nav">
 							<ul>
 								<li class="special">
 									<a href="#menu" class="menuToggle"><span>Menu</span></a>
 									<div id="menu">
 										<ul>
-											<li><a href="/Python/example.html">Python</a></li>
-											<li><a href="/C++/examples.html">C++</a></li>
+											 <li><a href="/Python/example.html">Python</a></li>
 											<li><a href="/About_me.html">About me</a></li>
 										</ul>
 									</div>
@@ -35,98 +38,79 @@
 				<!-- Main -->
 					<article id="main">
 						<header>
-							<h2>Python</h2>
-							<p>Take a look at my Python projects and completed examples</p>
+							<h2>Web Scraping</h2>
+							<p>Extracting Data from HTML with BeautifulSoup</p>
 						</header>
 						<section class="wrapper style5">
 							<div class="inner">
 
-
-
-								
-								<!-- My examples -->
 								<section>
-									<h3>My projects</h3>
-									<table>
-											<thead>
-												
-											</thead>
-											<tbody>
-												
-												<tr>
-													<td><a href="/Python/FSTEK.html">FSTEK</a></td>
-												</tr>
-												
-												
-											</tbody>
-											<tfoot>
-
-											</tfoot>
-										</table>
 									
-									
-									
-								<!-- My complited examples -->
-									<h4>Completed examples</h4>
-									<div class="table-wrapper">
-										<table>
-											<thead>
-												
-											</thead>
-											<tbody>
+									<hr />
+					
+								
+									<header>
+										<h4><b>Current weather data</b></h5>
+										<p><b>Discription</b></p>
+<p align="justify">
+I want to find the current temperature.
 
-												<tr>
-													<td><a href="/Python/API.html">API</a></td>
-												
-												</tr>
-												
-												<tr>
-													<td><a href="/Python/Web_scraping.html">Web scraping</a></td>
-												
-												</tr>
-												<tr>
-													<td><a href="/Python/Libraries.html">Libraries</a></td>
-												
-												</tr>											<tr>
-													<td><a href="/Python/Excel.html">Excel</a></td>
-												</tr>
-												
-											</tbody>
-											<tfoot>
-												
-											</tfoot>
-										</table>
-									</div>
+</p>
 
+								<img src="/images/Current_temperature.png" alt="" />
+									</header>
+							
+									
+									<hr />
+								
+									
+									<h5>Weather</h5>
+									
+<details>
+<summary>Code</summary>
+<pre><code>																
+<font color="#cc7832">import</font> requests <font color="#8d8c8e"># A built-in library for sending HTTP requests</font>
+<font color="#cc7832">from</font> bs4 <font color="#cc7832">import</font> BeautifulSoup #A built-in library for pulling data out of HTML and XML files
+URL = <font color="#693">'https://world-weather.ru/pogoda/russia/moscow/'</font> #Send an HTTP request to the URL of the webpage you want to access
+page = requests.get(URL) #Send an HTTP GET request and get a webpage. We have a Response object called page
+text = page.content #Accessing the HTML content from webpage
+soup = BeautifulSoup(text,  <font color="#5bae48"> 'html.parser'</font>) #Specifying the HTML parser
+
+#save BeautifulSoup to HTML document
+with open("output.html", "w", encoding='utf-8') as file: #UTF-8 is a byte oriented encoding
+    # prettify the soup object and convert it into a string
+    file.write(str(soup.prettify()))
+#open HTML document
+with open("output.html", "rb") as f:
+    doc = BeautifulSoup(f, "html.parser")
+#I know that the current temperature is located in this div. i found it by CTRL+U
+tag=doc.find("div", {"id": "weather-now-number"})
+temp=tag.text #Reformat bs4.element to plain text
+temp=" ".join(temp.split()) #rid of all repeated spaces and newlines
+temp=temp.replace(" ", "") #Remove all spaces from a string
+print("Current temperature in Moscow = ", temp)
+
+</code></pre>
+</details>
+								
 								</section>
-
-								
-								
-								
-
-								
-
-								
-								
-
+			
 							</div>
+
 						</section>
+
 					</article>
 
 				<!-- Footer -->
 					<footer id="footer">
 						<ul class="icons">
-							
 							<li><a href="https://www.facebook.com/valya.guitar" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
 							<li><a href="mailto:vel.kiseleva@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
 							<li><a href="https://www.linkedin.com/in/valentina-kiseleva-013782bb" class="fab fa-linkedin-in"><span class="label"></span></a></li>
 							<li><a href="https://t.me/vDevOps" class="fab fab fa-telegram"><span class="label"></span></a></li>
-							
-							
-							
 						</ul>
 						<ul class="copyright">
-							<li>&copy; My email</li><li>vel.kiseleva@gmail.com</li>
+							<li>&copy; Untitled</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
 						</ul>
 					</footer>
 
