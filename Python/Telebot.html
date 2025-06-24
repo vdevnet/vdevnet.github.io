@@ -1,1 +1,672 @@
-Hello
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Telebot</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="/index.html">Main page</a></h1>
+						<nav id="nav">
+							<ul>
+								<li class="special">
+									<a href="#menu" class="menuToggle"><span>Menu</span></a>
+									<div id="menu">
+										<ul>
+											<li><a href="/Python/example.html">Python</a></li>
+											<li><a href="/C++/examples.html">C++</a></li>
+											<li><a href="/About_me.html">About me</a></li>
+										</ul>
+									</div>
+								</li>
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Main -->
+					<article id="main">
+
+						<header>
+						       
+							
+							<h2>FSTEK</h2>
+							<p>FSTEC threat handling program</p>
+						</header>
+						
+						<section class="wrapper style5">
+							<div class="inner">
+								<section>
+									<hr />
+									<header>
+										
+                                                        <h3>FSTEK ver.2 </h2>
+							<p>List of applicable threats</p>
+<h5><p><b>
+Download threats via URL or from your local computer. Select objects of influence and violators.<br>
+Get a list of applicable threats.
+</b></p></h5>
+<p align="justify">
+<span class="image left"><img src="/images/fstek_eagle.jpg" height: auto alt="" /></span>
+I created a new version of the program. <br>
+Now you can download threats using the built-in URL (https://bdu.fstec.ru/files/documents/thrlist.xlsx). You can change this URL.
+You can also download the list of threats from your local computer.<br>
+When you select a list of threats by URL or from a local computer (using a radiobutton), the interface changes dynamically. This is created through the properties of <b></b>pack_forget()</b> objects.<br>
+<img src="/images/load_from_URL.jpg" alt="" /><br>
+<img src="/images/load_from_PC.jpg" alt="" /><br>
+
+You can then download all threats from the list of threats file or select "Load Threat Sources and Impacts." By selecting the second option, an additional window will open with manual selection of threat objects and impacts.
+The window with the selection of threat sources and impacts is below.<br>
+<img src="/images/FSTEK_window2.jpg" alt="" /><br>
+In the window with the selection of threat sources and impacts, you can use the search. You can select several objects at once and move them.
+Click the <b></b>"Download Threats"</b> button.
+Now you have received a list of threats that match the selected parameters.<br>
+<img src="/images/FSTEK_window3.jpg" alt="" /><br>									
+As in the previous version, you can see a description of each threat. Read her description.
+You can save the threats that are required.
+When you click the "Open saved document" button, a World file with previously selected threats opens. The document and table are generated using the docx library.<br>
+<img src="/images/FSTEK_window4.jpg" alt="" /><br>										
+<hr />
+
+										
+										<h3>FSTEK</h3>
+										<h5><p><b>Download the list of FSTEC threats in Excel format, select the ones you need, save in Word format.</b></p></h5>
+<p align="justify">
+<span class="image left"><img src="/images/FSTEK_ico.png" height: auto alt="" /></span>
+My colleagues get information about threats from  FSTEC website.
+They download threats from the FSTEC website and analyze the data.<br>
+Searching for the needed threat, scrolling through the information, reading the description of the threat, and copying the information into Word takes a long time.
+They also need to create a table in Word with a specific format.<br>
+I have optimized this process a bit.<br>
+Steps:<br>
+	<b>1.</b> Download the list of threats from the FSTEC website https://bdu.fstec.ru/files/documents/thrlist.xlsx<br>
+        <b>2.</b> Run exe file.<br>
+	<img src="/images/FSTEK_exe.jpg" alt="" /><br>
+	<b>3.</b> Load the thrlist.xlsx file into the program.<br>
+        <img src="/images/FSTEK_main.jpg" alt="" /><br><br>
+	The menu will display a list of threats. Clicking on a threat displays its description in the lower window.<br>
+	<img src="/images/FSTEK_load.jpg" alt="" /><br>
+	You can select multiple threats from the list of threats.
+	Clicking on a threat automatically displays its description.<br>
+  After selecting the list of threats, click "Save selected threats".<br>
+After that, the table file will be automatically created in the directory where the FSTEK.exe program is located.
+When you click on the "Open saved document" button, the doc file will automatically open.
+	
+	
+										
+</p>
+
+									</header>
+
+
+									<hr />
+
+
+									<h5>FSTEK</h5>
+									
+<details>
+<summary>Code</summary>
+<pre><code>																
+#LIBRARIES
+import os #operating system module
+from tkinter import * #Graphical User Interfaces
+from openpyxl import Workbook, load_workbook
+from tkinter import filedialog as fd
+from textwrap import wrap
+import docx
+from docx.enum.text import WD_ALIGN_PARAGRAPH #Specifies the start type of a section break
+from docx.enum.section import WD_SECTION, WD_ORIENT
+from docx.shared import Pt, Cm, Inches
+
+my_list = {}
+
+# ФУНКЦИИ
+def make_rows_bold(*rows):
+    for row in rows:
+        for cell in row.cells:
+            for paragraph in cell.paragraphs:
+                for run in paragraph.runs:
+                    run.font.bold = True
+                    run.font.name = 'Times new Roman'
+                    paragraph.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+# EXCEL ------------------------------------------------------------------------------------------------------------------
+
+#Путь расположению автономного файла
+#Получить текущую директорию расположения программы
+program_path=os.getcwd()
+#Добавить к текущему пути название файла с угрозами
+path=program_path+'\\thrlist.xlsx'
+
+# ФУНКЦИИ -------------------------------------------------------------------------------------------------------------------
+def open_file():
+    browse_text.set("loading ...")
+    # askopenfilename(): открывает диалоговое окно для выбора файла и возвращает путь к выбранному файлу. Если файл не выбран, возвращается пустая строка ""
+    file_name = fd.askopenfilenames()
+    if file_name != "":
+        file_name = ''.join(file_name)
+        get_excel_text(file_name)  # Вызов функции по конвертации Excel в текст
+        label_file["text"] = "Загружен файл: " + file_name
+        # myTuple = ['h', 'e', 'l', 'l', 'o']
+        # s = ''.join(myTuple)
+        browse_text.set("Загружен")
+    else:
+        label_file["text"] = "Файл не загружен"
+        browse_text.set("Загрузить")
+
+
+def get_excel_text(file):
+    wb = load_workbook(file)  # Открыть файл с угрозами
+    #wb = openpyxl.workbook.Workbook(encoding='utf-8')
+    ws = wb.active
+    for i in range(3, ws.max_row + 1):
+        my_listbox.insert(END, "Номер : " + str(ws['A' + str(i)].value)+" Название : "+ws['B' + str(i)].value) #Работает
+        my_list[i] = {}
+        my_list[i]['number'] = str(ws['A' + str(i)].value)
+        #_value = _row[0].value.encode('utf-8')
+        my_list[i]['name'] = ws['B' + str(i)].value
+        my_list[i]['desc'] = ws['C' + str(i)].value.replace('_x000D_','')
+
+
+from docx.oxml import OxmlElement
+
+def select_all():
+
+    result = ''
+    result2 = {}
+    key = 0
+    result2[key] = {}
+
+    doc1 = docx.Document()
+    doc1.add_section(start_type=WD_SECTION.NEW_PAGE)
+    doc1.sections[1].orientation = WD_ORIENT.LANDSCAPE
+    doc1.sections[1].orientation = WD_ORIENT.LANDSCAPE
+    doc1.sections[1].page_width = doc1.sections[0].page_height
+    doc1.sections[1].page_height = doc1.sections[0].page_width
+    doc1.sections[1].bottom_margin = Pt(0)  # Нижний отступ
+
+    for item in my_listbox.curselection():
+        result = result + str(my_listbox.get(item)) + '\n'
+
+    select = list(my_listbox.curselection())
+
+    for i in range(len(select)):
+        result2[key] = {}
+        result2[key]['number'] = my_list[select[i] + 3]['number']
+        result2[key]['name'] = my_list[select[i] + 3]['name']
+        result2[key]['desc'] = my_list[select[i] + 3]['desc']
+        key += 1
+
+
+    # добавляем таблицу 3x3
+    #table = doc1.add_table(rows=6, cols=6)
+    table = doc1.add_table(len(result2)+1, cols=6)
+    # применяем стиль для таблицы
+    table.style = 'Table Grid'
+
+    #пробуем дублирование
+    # set header values
+
+    # заполняем таблицу данными
+
+    table.cell(0, 0).text = "Ид. УБИ"
+    table.cell(0, 1).text = "Наименование УБИ"
+    table.cell(0, 2).text = "Описание"
+    table.cell(0, 3).text = "Источник угрозы"
+    table.cell(0, 4).text = "Объект воздействия"
+    table.cell(0, 5).text = "Оценка актуальности"
+    table.rows[0].cells[0].paragraphs[0].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    table.rows[0].cells[0].paragraphs[0].runs[0].font.name = 'Times new Roman'
+
+    table.autofit = False
+    table.allow_autofit = False
+    table.cell(0, 0).width = Inches(1.0)
+    table.cell(0, 1).width = Inches(2.0)
+    table.cell(0, 2).width = Inches(2.0)
+    table.cell(0, 3).width = Inches(1.0)
+    table.cell(0, 4).width = Inches(1.0)
+    table.cell(0, 5).width = Inches(1.0)
+
+    tbl_header = OxmlElement('w:tblHeader')  # create new oxml element flag which indicates that row is header row
+    first_row_props = table.rows[0]._element.get_or_add_trPr()  # get if exists or create new table row properties el
+    first_row_props.append(tbl_header)  # now first row is the header row
+
+
+    if len(result2)>0:
+        for i in range(0, len(result2)):
+
+            table.cell(i+1, 0).text = result2[i]['number']
+            table.cell(i + 1, 0).paragraphs[0].runs[0].font.name = 'Times new Roman'
+            table.cell(i+1, 1).text = result2[i]['name']
+            table.cell(i + 1, 1).paragraphs[0].runs[0].font.name = 'Times new Roman'
+            table.cell(i + 1, 1).paragraphs[0].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+            table.cell(i+1, 2).text = result2[i]['desc']
+            table.cell(i+1, 2).paragraphs[0].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+            table.cell(i+1, 2).paragraphs[0].runs[0].font.name = 'Times new Roman'
+
+        make_rows_bold(table.rows[0])
+
+    label_save["text"] = "Сохранен файл: " + program_path.replace('\\', '/') + '/table.docx'
+
+    doc1.save('table.docx')
+
+def save_all():
+    if len(my_list) > 0:
+
+        doc1 = docx.Document()
+        doc1.add_section(start_type=WD_SECTION.NEW_PAGE)
+        doc1.sections[1].orientation = WD_ORIENT.LANDSCAPE
+        doc1.sections[1].orientation = WD_ORIENT.LANDSCAPE
+        doc1.sections[1].page_width = doc1.sections[0].page_height
+        doc1.sections[1].page_height = doc1.sections[0].page_width
+        doc1.sections[1].bottom_margin = Pt(0)  # Нижний отступ
+
+        # добавляем таблицу 3x3
+        table = doc1.add_table(rows=len(my_list)+1, cols=6)
+        # применяем стиль для таблицы
+        table.style = 'Table Grid'
+
+        # заполняем таблицу данными
+
+        table.cell(0, 0).text = "Ид. УБИ"
+        table.cell(0, 1).text = "Наименование УБИ"
+        table.cell(0, 2).text = "Описание"
+        table.cell(0, 3).text = "Источник угрозы"
+        table.cell(0, 4).text = "Объект воздействия"
+        table.cell(0, 5).text = "Оценка актуальности"
+        table.rows[0].cells[0].paragraphs[0].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        table.rows[0].cells[0].paragraphs[0].runs[0].font.name = 'Times new Roman'
+
+        tbl_header = OxmlElement('w:tblHeader')  # create new oxml element flag which indicates that row is header row
+        first_row_props = table.rows[
+            0]._element.get_or_add_trPr()  # get if exists or create new table row properties el
+        first_row_props.append(tbl_header)  # now first row is the header row
+
+        table.autofit = False
+        table.allow_autofit = False
+        table.cell(0, 0).width = Inches(1.0)
+        table.cell(0, 1).width = Inches(2.0)
+        table.cell(0, 2).width = Inches(2.0)
+        table.cell(0, 3).width = Inches(1.0)
+        table.cell(0, 4).width = Inches(1.0)
+        table.cell(0, 5).width = Inches(1.0)
+
+        #----------------------------------------------------------------------
+        for i in range(3, (len(my_list)+3)):
+            #print(my_list[i]['number'])
+            table.cell(i-2, 0).text = my_list[i]['number']
+            table.cell(i - 2, 0).paragraphs[0].runs[0].font.name = 'Times new Roman'
+            table.cell(i-2, 1).text = my_list[i]['name']
+            table.cell(i - 2, 1).paragraphs[0].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+            table.cell(i - 2, 1).paragraphs[0].runs[0].font.name = 'Times new Roman'
+            table.cell(i-2, 2).text = my_list[i]['desc']
+            table.cell(i-2, 0).paragraphs[0].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+            table.cell(i-2, 2).paragraphs[0].runs[0].font.name = 'Times new Roman'
+
+        make_rows_bold(table.rows[0])
+        doc1.save('table.docx')
+        label_save["text"] = "Сохранен файл: " + program_path.replace('\\', '/') + '/table.docx'
+
+click_before=()
+click_after=()
+
+
+def CurSelet(evt):
+    global click_before
+    global click_after
+
+    global label_desk
+    global wrapped_text
+    global s
+
+    value = str((my_listbox.get(ACTIVE)))
+
+    if my_listbox.curselection()!=():
+        last_item = my_listbox.curselection()[-1]
+
+        # определение раздницы
+    click_before = click_after
+    click_after = my_listbox.curselection()
+    now_click = (tuple(set(click_before) ^ set(click_after)))
+    text = my_list[now_click[0] + 3]['desc']
+    #text = my_list[3]['desc']
+
+    # Вычисляем среднюю ширину символа #работает
+    average_char_width = label_desk.winfo_width() / len(text)
+
+    # Приблизительно рассчитываем количество символов, которое помещается в окне
+    chars_per_line = int(label_desk.winfo_width() / average_char_width)
+
+    # В цикле уменьшаем это количество, пока текст не станет помещаться
+
+    lent = len(text)
+    if lent < 65:
+        label_desk['text'] = text
+    else:
+        # while chars_per_line > 72: #работает
+        while chars_per_line > 136:
+            wrapped_text = '\n'.join(wrap(text, chars_per_line))
+            # print("wrapped_text = ", wrapped_text, "chars_per_line =", chars_per_line)
+            label_desk['text'] = wrapped_text
+            # root.update()
+            chars_per_line -= 1
+
+        label_desk['text'] = wrapped_text
+
+#создать словарь. Вытащить все в него. И оперировать с описанием
+
+
+def click_button():
+    #os.system('C:/Users/valentinakiseleva/Desktop/2/26.01.2023/table.docx')
+    #label_save["text"] = "Сохранен файл: " + program_path.replace('\\', '/') + '/table.docx'
+    os.system(program_path.replace('\\', '/') + '/table.docx')
+
+# ГРФИЧЕСКИЙ ИНТЕРФЕЙС ----------------------------------------------------------------------------------------------------------
+
+# ГЛАВНОЕ ОКНО
+root = Tk()
+root.title("БДУ Угроз ФСТЭК России")  # Заголовок
+root.geometry("1150x700")  # Ширина/Высота окна
+
+# ГРФИЧЕСКИЕ ОБЪЕКТЫ
+
+# ФРЕЙМ ДЛЯ УГРОЗ С LISTBOX
+my_frame = Frame(
+    root)  # создать объект фрейм от класса Frame и разм на главном окне. Фрейм нужен для группировки объектов
+my_frame.place(x=5, y=120)  #
+
+# LISTBOX С УГРОЗАМИ И СКРОЛОМ
+my_scrollbar = Scrollbar(my_frame, orient=VERTICAL)  # создать объект прокрутки
+my_listbox = Listbox(my_frame, width=180, yscrollcommand=my_scrollbar.set,
+                     selectmode=MULTIPLE)  # создать объект my_listbox и разместить на my_frame
+my_scrollbar.config(command=my_listbox.yview)
+my_scrollbar.pack(side=RIGHT, fill=Y)
+my_listbox.pack(pady=15)
+
+# ФРЕЙМ ДЛЯ LABEL "СПИСОК УГРОЗ"
+labelframe = LabelFrame(root)
+labelframe.place(x=6, y=110)
+# метка "Список угроз"
+label_names = Label(labelframe, text="Список угроз", width=155, bg="#DCDCDC")
+label_names.pack()
+
+# ФРЕЙМ ДЛЯ LABEL "ОПИСАНИЕ УГРОЗЫ"
+labelframe = LabelFrame(root)
+labelframe.place(x=5, y=375)
+# метка с названием "Описание угрозы"
+label_names = Label(labelframe, text="Описание угрозы", width=156, bg="#DCDCDC")
+label_names.pack()
+
+# ФРЕЙМ ДЛЯ LABEL С ТЕКСТОМ ОПИСАНИЯ УГРОЗЫ"
+label_desk = LabelFrame(root)
+label_desk.place(x=5, y=400)
+# метка с описанием угрозы
+label_desk = Label(label_desk, text="Описание угрозы", width=121, height=15,
+                   anchor="nw", font=('times',
+                                      13))  # выровнить текст описания слева вверху, параметр anchor="nw"
+label_desk.pack()
+
+# # ФРЕЙМ ДЛЯ LABEL "ЗАГРУЖАТЬ УГРОЗЫ ИЗ"
+# метка "Список угроз"
+canvas= Canvas(root, bd=2, highlightthickness=2)
+canvas.place(x=5, y=10)
+label2 = Label(canvas, text="Загрузить файл с угрозами", borderwidth=0, font=("Сourier new", 12, 'bold'))
+label2.pack(side=LEFT, padx=0, pady=0)
+
+canvas_file= Canvas(root, bd=2, highlightthickness=2,width=1000, height=5)
+canvas_file.place(x=5, y=40)
+label_file = Label(canvas_file, text="Сейчас файл не загружен", width=1000, height=1, anchor="nw", font=("Сourier new", 10))
+label_file.pack()
+
+
+
+# КНОПКА "Загрузить"
+browse_text = StringVar()
+browse_btn = Button(root, textvariable=browse_text,
+                    command=lambda: open_file(), font=("Сourier new", 12),
+                    bg="#828282", fg="white", height=1, width=15)
+
+browse_text.set("Загрузить")  # set - заносит значение в метапеременную
+# browse_btn.grid(column=4,row=0)
+#browse_btn.place(x=1150, y=120)
+browse_btn.place(x=5, y=70)
+
+"#959d9d"
+
+# КНОПКА "Сохранить выбранные угрозы"
+my_button4=Button(root, text="Сохранить выбранные угрозы", command=select_all, font=("Сourier new", 12),
+                    bg="#828282", fg="white", height=1, width=27)
+my_button4.place(x=5, y=300)
+
+# КНОПКА "Открыть сохраненный документ"
+my_button5=Button(root, text="Открыть сохраненный документ", command=click_button, font=("Сourier new", 12), bg="#828282", fg="white", height=1, width=27)
+my_button5.place(x=270, y=300)
+# КНОПКА "Сохранить все угрозы"
+my_button6=Button(root, text="Сохранить все угрозы", command=save_all, font=("Сourier new", 12),
+                    bg="#828282", fg="white", height=1, width=27)
+my_button6.place(x=535, y=300)
+
+canvas_save= Canvas(root, bd=2, highlightthickness=2,width=1000, height=5)
+canvas_save.place(x=5, y=340)
+label_save = Label(canvas_save, text="Выбранные угрозы не сохранены в файл", width=1000, height=1, anchor="nw", font=("Сourier new", 10))
+label_save.pack()
+
+# ДЕЙСТВИЯ ------------------------------------------
+#my_listbox.bind('<<ListboxSelect>>',CurSelet)
+
+my_listbox.bind('&lt;&lt;ListboxSelect&gt;&gt;',CurSelet)
+root.mainloop()  # Отрисовка главного окна
+
+</code></pre>
+</details>
+<a href="https://disk.yandex.ru/d/byxPHYGyWmFtpA">FSTEK.exe</a><br>
+<a href="https://disk.yandex.ru/d/BqjhjOyR4YrKhQ">FSTEK.py</a><br>
+	
+<hr>
+	<h3>FSTEK - load list from URL</h3>
+	<h5><p><b>Load list of threats from URL</b></p></h5>
+<p align="justify">
+<span class="image left"><img src="/images/Download.png" height: auto alt="" /></span>
+Уou can download the list of threats by the URL. The URL has already been added to the program.
+You can select it manually.<br>
+By this code you can download the list of threats from the Internet or the corporate network with a proxy. <br>
+<ul>
+   <li>Сertificate verification is skipped.</li>
+   <li>URL validation and download file type check added.</li>
+   <li>The program will show the directory of the downloaded file.</li>
+</ul>
+<img src="/images/FSTEK-URL.png"  alt="" /> <br>
+</p>
+									
+									
+<details>
+<summary>Code</summary>
+<pre><code>	
+import tkinter as tk
+import requests
+import os
+import re
+import mimetypes
+
+downloadurl = 'https://bdu.fstec.ru/files/documents/thrlist.xlsx'
+
+#Функция проверки URL загрузки угроз ФСТЭК
+def isValidURL(str):
+    regex = ("((http|https)://)(www.)?" +
+             "[a-zA-Z0-9@:%._\\+~#?&//=]" +
+             "{2,256}\\.[a-z]" +
+             "{2,6}\\b([-a-zA-Z0-9@:%" +
+             "._\\+~#?&//=]*)")
+
+    p = re.compile(regex)
+
+    if (str == None):
+        return False
+
+    if (re.search(p, str)):
+        return True
+    else:
+        return False
+
+#Функция проверки URL, что загружаемый файл является типом Excel
+def isExcelMime(str):
+    #Встроенный тип файла xlsx
+    xlsx=('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', None)
+
+    if ((mimetypes.guess_type(str)) == xlsx):
+        return True
+    else:
+        return False
+
+def show_message():
+
+    #label["text"] = entry.get()  # получаем введенный текст
+    lab_after_change["text"] = " URL изменен"  # получаем введенный текст
+    global downloadurl
+    print(utl_entry.get())
+    downloadurl = utl_entry.get()
+    print(type(downloadurl))
+    filename = downloadurl[downloadurl.rfind('/') + 1:]  # rfind - найти индекс самого последнего символа '/'
+    print(filename)
+
+# загрузка thrlist по блокам и запись в файл
+def loadfromweb(req_get, downloadurl):
+    filename = req_get.url[downloadurl.rfind('/') + 1:]  # rfind - найти индекс самого последнего символа '/'
+    print(filename)
+    with open(filename, 'wb') as f:
+        for chunk in req_get.iter_content(chunk_size=8192):
+            if chunk:
+                f.write(chunk)
+    print(os.getcwd())
+
+# изменить цвет кнопки при наведении на нее мышкой
+def changeOnHover(button, colorOnHover, colorOnLeave):
+    button.bind("<Enter>", func=lambda e: button.config(  # 2
+        background=colorOnHover))
+    button.bind("<Leave>", func=lambda e: button.config(  # 3 #4
+        background=colorOnLeave))
+
+def click_button():
+    global downloadurl
+
+    if ((isValidURL(downloadurl) == True) and (isExcelMime(downloadurl) == True)):
+        #print("Yes")
+        try:
+            req = requests.get(downloadurl, headers={'User-agent': 'your bot 0.1'},
+                               verify=False)  # без проверки сертификата
+            # если ответ успешен, исключения задействованы не будут
+            req.raise_for_status()
+        except Exception as err:
+            proxies = {'https': 'http://10.105.0.217:3128'}
+            req = requests.session()
+            req.proxies.update(proxies)
+            req_get = req.get(downloadurl, headers={'User-agent': 'your bot 0.1'},
+                              verify=False)
+            loadfromweb(req_get, downloadurl)  # В функцию  loadfromweb передается req_get -сессия
+            lab_file2["text"]="Файл загружен в директорию " + os.getcwd()
+        # else выполняется в случае успеха в блоке try
+        else:
+            loadfromweb(req, downloadurl)  # В функцию  loadfromweb передается req - запрос
+            lab_file2["text"] = "Файл загружен в директорию " + os.getcwd()
+
+    else:
+        #print("No")
+        lab_file2["text"] = " URL для загрузки файла Excel некорректен"
+
+
+root = tk.Tk()
+root.title('Загрузка угроз ФСТЭК')
+
+root.geometry("1100x320")  # Размер окна интерфейса
+
+# Виджет для загрузки файла с угрозами
+canv_load = tk.Canvas(root, width=200, height=400, borderwidth=3, relief='ridge', bg='#DCDCDC')
+canv_load.pack(padx=20, pady=20,
+               anchor=tk.NW)  # отступ виджета от границ контейнера по горизонтали/вертикали NW-верхний левый угол
+
+lab_load = tk.Label(canv_load, text="Загрузить файл с угрозами", width=100, height=1, anchor="nw",
+                    # NW-верхний левый угол
+                    font=("Сourier new", 12, 'bold'), bg='#DCDCDC')
+lab_load.pack(padx=10,pady=(10, 5))  # pady - верхний/нижний отступ виджета от границ контейнера по вертикали
+
+lab_url = tk.Label(canv_load, text="Файл будет загружен с указанного URL.",width=100, height=1,anchor="nw",font=("Сourier new", 10),bg='#DCDCDC')
+lab_url.pack(padx=10, pady=0,anchor="nw")
+lab_url2 = tk.Label(canv_load, text="При необходимости введите новый URL.",width=100, height=1,anchor="nw",font=("Сourier new", 10), bg='#DCDCDC')
+lab_url2.pack(padx=8, pady=5,anchor="nw")
+
+#Label для отображения URL после изменения пользователем
+lab_after_change = tk.Label(canv_load, width=100, height=1,anchor="nw",font=("Сourier new", 10), bg='#DCDCDC')
+lab_after_change.pack(padx=5, pady=0,anchor="nw")
+
+#Поле для ввода URL
+utl_entry = tk.Entry(canv_load,width=100, font=("Times new roman", 12))
+utl_entry.insert(0, downloadurl)
+utl_entry.pack(padx=10, pady=0,anchor="nw")
+
+#Кнопка для изменения URL пользователем
+change_url_btn = tk.Button(canv_load, text="Изменить URL",font=("Сourier new", 12), bg="#828282", fg="white",height=1, width=15, command=show_message)
+change_url_btn.pack(padx=10, pady=0,anchor="nw")
+
+#Label для отображения состояния загрузки файл угроз (Загружен или есть ошибка URL)
+lab_file2 = tk.Label(canv_load, text="Сейчас файл не загружен",width=100, height=1,anchor="nw",font=("Сourier new", 10),
+                    bg='#DCDCDC')
+lab_file2.pack(padx=10, pady=(5, 0),anchor="nw")
+
+#Кнопка для загрузки Угроз
+browse_btn = tk.Button(canv_load, text="Загрузить", font=("Сourier new", 12), bg="#828282", fg="white",
+                       height=1, width=15, command=click_button)
+browse_btn.pack(padx=10, pady=12, anchor="nw")
+
+#Функция для изменения цвета кнопки при наведении на нее мышкой
+changeOnHover(browse_btn, "#C7D0CC", "#828282")  # изменить цвет кнопки при наведении на нее мышкой
+changeOnHover(change_url_btn, "#C7D0CC", "#828282")  # изменить цвет кнопки при наведении на нее мышкой
+
+root.mainloop()  # Нарисовать интерфейс программы
+</code></pre>
+</details>
+								
+								</section>
+
+			
+			
+							</div>
+
+						</section>
+
+					</article>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<ul class="icons">
+							
+							<li><a href="https://www.facebook.com/valya.guitar" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="mailto:vel.kiseleva@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+							<li><a href="https://www.linkedin.com/in/valentina-kiseleva-013782bb" class="fab fa-linkedin-in"><span class="label"></span></a></li>
+							<li><a href="https://t.me/vDevOps" class="fab fab fa-telegram"><span class="label"></span></a></li>
+						</ul>
+						<ul class="copyright">
+							<li>&copy; My email</li><li>vel.kiseleva@gmail.com</li>
+						</ul>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="/assets/js/jquery.min.js"></script>
+			<script src="/assets/js/jquery.scrollex.min.js"></script>
+			<script src="/assets/js/jquery.scrolly.min.js"></script>
+			<script src="/assets/js/browser.min.js"></script>
+			<script src="/assets/js/breakpoints.min.js"></script>
+			<script src="/assets/js/util.js"></script>
+			<script src="/assets/js/main.js"></script>
+
+	</body>
+</html>
