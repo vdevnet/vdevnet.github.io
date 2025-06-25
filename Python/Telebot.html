@@ -57,158 +57,41 @@ Send the file to the telegram bot. Get a PDF report with the results of the anti
 <span class="image left"><img src="/images/main.jpg" height: auto alt="" /></span><br>
 </p>
 <br>
-<p align="justify">										
+<p align="left">										
 Telebot is created to upload files for checking. Then the files are sent via API to the ATHENA Sandbox and a response is returned. The response contains the antivirus verdict.
-
+<br>
 <img src="/images/Telebot_report.png" height: auto alt="" />
+</p>
+
+<p align="left">
+I studied how to work with API and to upload files to a telegram bot and to generate a PDF report on the results of the program's work.
 </p>
 <br>
 
 									
 <hr>																
 <details>
-<summary>Code</summary>
+<summary>Code (small part)</summary>
 <pre><code>	
-import tkinter as tk
-import requests
-import os
-import re
-import mimetypes
+async def handle_any_media_wo_no_caption (message: types.Message):
+    await message.answer(f"Получил Ваш файл. Приступаю к обработке. Через минуту сообщу новую информацию.")
 
-downloadurl = 'https://bdu.fstec.ru/files/documents/thrlist.xlsx'
-
-#Функция проверки URL загрузки угроз ФСТЭК
-def isValidURL(str):
-    regex = ("((http|https)://)(www.)?" +
-             "[a-zA-Z0-9@:%._\\+~#?&//=]" +
-             "{2,256}\\.[a-z]" +
-             "{2,6}\\b([-a-zA-Z0-9@:%" +
-             "._\\+~#?&//=]*)")
-
-    p = re.compile(regex)
-
-    if (str == None):
-        return False
-
-    if (re.search(p, str)):
-        return True
-    else:
-        return False
-
-#Функция проверки URL, что загружаемый файл является типом Excel
-def isExcelMime(str):
-    #Встроенный тип файла xlsx
-    xlsx=('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', None)
-
-    if ((mimetypes.guess_type(str)) == xlsx):
-        return True
-    else:
-        return False
-
-def show_message():
-
-    #label["text"] = entry.get()  # получаем введенный текст
-    lab_after_change["text"] = " URL изменен"  # получаем введенный текст
-    global downloadurl
-    print(utl_entry.get())
-    downloadurl = utl_entry.get()
-    print(type(downloadurl))
-    filename = downloadurl[downloadurl.rfind('/') + 1:]  # rfind - найти индекс самого последнего символа '/'
-    print(filename)
-
-# загрузка thrlist по блокам и запись в файл
-def loadfromweb(req_get, downloadurl):
-    filename = req_get.url[downloadurl.rfind('/') + 1:]  # rfind - найти индекс самого последнего символа '/'
-    print(filename)
-    with open(filename, 'wb') as f:
-        for chunk in req_get.iter_content(chunk_size=8192):
-            if chunk:
-                f.write(chunk)
-    print(os.getcwd())
-
-# изменить цвет кнопки при наведении на нее мышкой
-def changeOnHover(button, colorOnHover, colorOnLeave):
-    button.bind("<Enter>", func=lambda e: button.config(  # 2
-        background=colorOnHover))
-    button.bind("<Leave>", func=lambda e: button.config(  # 3 #4
-        background=colorOnLeave))
-
-def click_button():
-    global downloadurl
-
-    if ((isValidURL(downloadurl) == True) and (isExcelMime(downloadurl) == True)):
-        #print("Yes")
-        try:
-            req = requests.get(downloadurl, headers={'User-agent': 'your bot 0.1'},
-                               verify=False)  # без проверки сертификата
-            # если ответ успешен, исключения задействованы не будут
-            req.raise_for_status()
-        except Exception as err:
-            proxies = {'https': 'http://10.105.0.217:3128'}
-            req = requests.session()
-            req.proxies.update(proxies)
-            req_get = req.get(downloadurl, headers={'User-agent': 'your bot 0.1'},
-                              verify=False)
-            loadfromweb(req_get, downloadurl)  # В функцию  loadfromweb передается req_get -сессия
-            lab_file2["text"]="Файл загружен в директорию " + os.getcwd()
-        # else выполняется в случае успеха в блоке try
-        else:
-            loadfromweb(req, downloadurl)  # В функцию  loadfromweb передается req - запрос
-            lab_file2["text"] = "Файл загружен в директорию " + os.getcwd()
-
-    else:
-        #print("No")
-        lab_file2["text"] = " URL для загрузки файла Excel некорректен"
+    if message.document:
+        #получить тип документа. сгенерировать имя
+        FILE_UNIQUE_ID = message.document.file_unique_id
+        FILE_INFO = await BOT.get_file(message.document.file_id)
+        FILEEXT = FILE_INFO.file_path.split(".")[-1]
+        NAME = FILE_UNIQUE_ID+(".")+FILEEXT
+        #Сохранение файла на локальный диск
+        FILE = await BOT.get_file(message.document.file_id)
+        await BOT.download_file(FILE.file_path, NAME)
 
 
-root = tk.Tk()
-root.title('Загрузка угроз ФСТЭК')
-
-root.geometry("1100x320")  # Размер окна интерфейса
-
-# Виджет для загрузки файла с угрозами
-canv_load = tk.Canvas(root, width=200, height=400, borderwidth=3, relief='ridge', bg='#DCDCDC')
-canv_load.pack(padx=20, pady=20,
-               anchor=tk.NW)  # отступ виджета от границ контейнера по горизонтали/вертикали NW-верхний левый угол
-
-lab_load = tk.Label(canv_load, text="Загрузить файл с угрозами", width=100, height=1, anchor="nw",
-                    # NW-верхний левый угол
-                    font=("Сourier new", 12, 'bold'), bg='#DCDCDC')
-lab_load.pack(padx=10,pady=(10, 5))  # pady - верхний/нижний отступ виджета от границ контейнера по вертикали
-
-lab_url = tk.Label(canv_load, text="Файл будет загружен с указанного URL.",width=100, height=1,anchor="nw",font=("Сourier new", 10),bg='#DCDCDC')
-lab_url.pack(padx=10, pady=0,anchor="nw")
-lab_url2 = tk.Label(canv_load, text="При необходимости введите новый URL.",width=100, height=1,anchor="nw",font=("Сourier new", 10), bg='#DCDCDC')
-lab_url2.pack(padx=8, pady=5,anchor="nw")
-
-#Label для отображения URL после изменения пользователем
-lab_after_change = tk.Label(canv_load, width=100, height=1,anchor="nw",font=("Сourier new", 10), bg='#DCDCDC')
-lab_after_change.pack(padx=5, pady=0,anchor="nw")
-
-#Поле для ввода URL
-utl_entry = tk.Entry(canv_load,width=100, font=("Times new roman", 12))
-utl_entry.insert(0, downloadurl)
-utl_entry.pack(padx=10, pady=0,anchor="nw")
-
-#Кнопка для изменения URL пользователем
-change_url_btn = tk.Button(canv_load, text="Изменить URL",font=("Сourier new", 12), bg="#828282", fg="white",height=1, width=15, command=show_message)
-change_url_btn.pack(padx=10, pady=0,anchor="nw")
-
-#Label для отображения состояния загрузки файл угроз (Загружен или есть ошибка URL)
-lab_file2 = tk.Label(canv_load, text="Сейчас файл не загружен",width=100, height=1,anchor="nw",font=("Сourier new", 10),
-                    bg='#DCDCDC')
-lab_file2.pack(padx=10, pady=(5, 0),anchor="nw")
-
-#Кнопка для загрузки Угроз
-browse_btn = tk.Button(canv_load, text="Загрузить", font=("Сourier new", 12), bg="#828282", fg="white",
-                       height=1, width=15, command=click_button)
-browse_btn.pack(padx=10, pady=12, anchor="nw")
-
-#Функция для изменения цвета кнопки при наведении на нее мышкой
-changeOnHover(browse_btn, "#C7D0CC", "#828282")  # изменить цвет кнопки при наведении на нее мышкой
-changeOnHover(change_url_btn, "#C7D0CC", "#828282")  # изменить цвет кнопки при наведении на нее мышкой
-
-root.mainloop()  # Нарисовать интерфейс программы
+    elif message.photo:
+        # сгенерировать имя фотографии
+        await message.answer(f"Пожалуйста, загрузите фото, как файл. "
+                             f"Для этого выберете 'Send as File' "
+                             f"в верхнем или контекстном меню загружаемого фото")
 </code></pre>
 </details>
 								
